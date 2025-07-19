@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../features/auth/authSlice';
 
@@ -9,11 +9,14 @@ const Header = () => {
   const { user } = useSelector(state => state.auth);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const handleLogout = () => {
     dispatch(logout());
     navigate('/login');
   };
+
+  const isStudyPage = location.pathname.startsWith('/study/');
 
   return (
     <header className='bg-white shadow-md border-b border-gray-200'>
@@ -21,7 +24,7 @@ const Header = () => {
         <div className='flex justify-between items-center h-16'>
           <div className='flex-shrink-0'>
             <Link to='/' className='text-2xl font-bold text-blue-600'>
-              MyApp
+              Interview Prep
             </Link>
           </div>
 
@@ -41,6 +44,14 @@ const Header = () => {
                 >
                   Dashboard
                 </Link>
+                {isStudyPage && (
+                  <Link
+                    to='/dashboard'
+                    className='text-blue-600 hover:text-blue-800 px-3 py-2 rounded-md text-sm font-medium bg-blue-50 border border-blue-200'
+                  >
+                    ← Back to Topics
+                  </Link>
+                )}
                 <Link
                   to='/profile'
                   className='text-gray-700 hover:text-blue-600 px-3 py-2 rounded-md text-sm font-medium'
