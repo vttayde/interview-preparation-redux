@@ -44,35 +44,96 @@ const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "JavaScript T
                 timestamp: new Date().toLocaleTimeString() 
             }]);
 
-            // Simple console capture
+            // Enhanced console capture with proper formatting
             const logs = [];
             const originalLog = console.log;
+            const originalError = console.error;
+            const originalWarn = console.warn;
+            
             console.log = (...args) => {
-                logs.push(args.join(' '));
+                // Properly format different types of values
+                const formattedArgs = args.map(arg => {
+                    if (typeof arg === 'object' && arg !== null) {
+                        try {
+                            return JSON.stringify(arg, null, 2);
+                        } catch {
+                            return String(arg);
+                        }
+                    } else if (typeof arg === 'undefined') {
+                        return 'undefined';
+                    } else if (typeof arg === 'function') {
+                        return arg.toString();
+                    }
+                    return String(arg);
+                });
+                logs.push({ type: 'log', content: formattedArgs.join(' ') });
                 originalLog.apply(console, args);
+            };
+
+            console.error = (...args) => {
+                const formattedArgs = args.map(arg => {
+                    if (typeof arg === 'object' && arg !== null) {
+                        try {
+                            return JSON.stringify(arg, null, 2);
+                        } catch {
+                            return String(arg);
+                        }
+                    }
+                    return String(arg);
+                });
+                logs.push({ type: 'error', content: formattedArgs.join(' ') });
+                originalError.apply(console, args);
+            };
+
+            console.warn = (...args) => {
+                const formattedArgs = args.map(arg => {
+                    if (typeof arg === 'object' && arg !== null) {
+                        try {
+                            return JSON.stringify(arg, null, 2);
+                        } catch {
+                            return String(arg);
+                        }
+                    }
+                    return String(arg);
+                });
+                logs.push({ type: 'warn', content: formattedArgs.join(' ') });
+                originalWarn.apply(console, args);
             };
 
             // Simple code execution with Function constructor
             const func = new Function(code);
             const result = func();
 
-            // Restore console
+            // Restore console methods
             console.log = originalLog;
+            console.error = originalError;
+            console.warn = originalWarn;
 
-            // Show console logs
+            // Show console logs with proper formatting
             logs.forEach(log => {
                 setOutput(prev => [...prev, { 
-                    type: 'log', 
-                    content: log, 
+                    type: log.type, 
+                    content: log.content, 
                     timestamp: new Date().toLocaleTimeString() 
                 }]);
             });
 
             // Show result if any
             if (result !== undefined) {
+                let resultContent;
+                if (typeof result === 'object' && result !== null) {
+                    try {
+                        resultContent = `Return Value:\n${JSON.stringify(result, null, 2)}`;
+                    } catch {
+                        resultContent = `Return Value: ${String(result)}`;
+                    }
+                } else {
+                    resultContent = `Return Value: ${String(result)}`;
+                }
+                
                 setOutput(prev => [...prev, { 
                     type: 'result', 
-                    content: `Result: ${String(result)}`, 
+                    content: resultContent, 
                     timestamp: new Date().toLocaleTimeString() 
                 }]);
             }
@@ -87,7 +148,7 @@ const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "JavaScript T
         } catch (error) {
             setOutput(prev => [...prev, { 
                 type: 'error', 
-                content: `❌ Error: ${error.message}`, 
+                content: `❌ Runtime Error:\n${error.name}: ${error.message}${error.stack ? '\n\nStack trace:\n' + error.stack : ''}`, 
                 timestamp: new Date().toLocaleTimeString() 
             }]);
         } finally {
@@ -125,11 +186,12 @@ const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "JavaScript T
 
     const getOutputStyle = (type) => {
         switch (type) {
-            case 'error': return 'text-red-400';
+            case 'error': return 'text-red-400 font-medium';
             case 'success': return 'text-green-400';
             case 'info': return 'text-blue-400';
-            case 'result': return 'text-cyan-400';
+            case 'result': return 'text-cyan-400 font-medium';
             case 'log': return 'text-gray-300';
+            case 'warn': return 'text-yellow-400';
             default: return 'text-gray-300';
         }
     };
@@ -223,11 +285,12 @@ const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "JavaScript T
                                 </div>
                             ) : (
                                 output.map((item, index) => (
-                                    <div key={index} className="py-2 border-b border-gray-700">
-                                        <div className="text-xs text-gray-400 mb-1">
-                                            {item.timestamp} - {item.type}
+                                    <div key={index} className="py-2 border-b border-gray-700 last:border-b-0">
+                                        <div className="text-xs text-gray-400 mb-1 flex justify-between">
+                                            <span>{item.timestamp}</span>
+                                            <span className="capitalize">{item.type}</span>
                                         </div>
-                                        <div className={getOutputStyle(item.type)}>
+                                        <div className={`${getOutputStyle(item.type)} whitespace-pre-wrap break-words`}>
                                             {item.content}
                                         </div>
                                     </div>
