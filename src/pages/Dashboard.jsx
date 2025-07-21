@@ -76,6 +76,14 @@ const Dashboard = () => {
       icon: '🚀',
       color: 'red',
       route: '/study/projects'
+    },
+    {
+      id: 10,
+      title: 'Interview Questions',
+      description: 'Common interview questions and answers',
+      icon: '❓',
+      color: 'indigo',
+      route: '/study/interview-questions'
     }
   ];
 
@@ -88,7 +96,8 @@ const Dashboard = () => {
       cyan: 'bg-cyan-50 border-cyan-200 hover:bg-cyan-100',
       green: 'bg-green-50 border-green-200 hover:bg-green-100',
       purple: 'bg-purple-50 border-purple-200 hover:bg-purple-100',
-      red: 'bg-red-50 border-red-200 hover:bg-red-100'
+      red: 'bg-red-50 border-red-200 hover:bg-red-100',
+      indigo: 'bg-indigo-50 border-indigo-200 hover:bg-indigo-100'
     };
     return colorMap[color] || 'bg-gray-50 border-gray-200 hover:bg-gray-100';
   };

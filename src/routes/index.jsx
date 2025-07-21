@@ -17,6 +17,7 @@ import TypeScript from '../pages/study-topics/typescript/TypeScript';
 import NodeJS from '../pages/study-topics/nodejs/NodeJS';
 import Database from '../pages/study-topics/database/Database';
 import Projects from '../pages/study-topics/projects/Projects';
+import InterviewQuestions from '../pages/study-topics/interview-questions/InterviewQuestions';
 
 export const router = createBrowserRouter([
   {
@@ -122,6 +123,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Projects />
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: 'study/interview-questions',
+        element: (
+          <ProtectedRoute>
+            <InterviewQuestions />
           </ProtectedRoute>
         )
       }
