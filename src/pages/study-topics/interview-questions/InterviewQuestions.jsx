@@ -23,9 +23,9 @@ const InterviewQuestions = () => {
                 {content.map((example) => (
                     <div key={example.id} className={`bg-${example.color}-50 p-6 rounded-lg`}>
                         <h4 className={`font-semibold text-${example.color}-800 mb-3 text-lg`}>{example.title}</h4>
-                        <p className={`text-${example.color}-700 text-sm mb-3`}>
+                        <div className={`text-${example.color}-700 text-sm mb-3`}>
                             {example.description}
-                        </p>
+                        </div>
                         {example.code && (
                             <CodeDisplay
                                 code={example.code}
@@ -47,7 +47,7 @@ const InterviewQuestions = () => {
             </div>
 
             {/* Tab Navigation */}
-            <div className="mb-6">
+            {tabs && <div className="mb-6">
                 <nav className="flex flex-wrap gap-2">
                     {tabs.map((tab) => (
                         <button
@@ -63,7 +63,7 @@ const InterviewQuestions = () => {
                         </button>
                     ))}
                 </nav>
-            </div>
+            </div>}
 
             {/* Tab Content */}
             <div className="min-h-[400px]">
