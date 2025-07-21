@@ -3,9 +3,10 @@ import StudyNavigation from '../../../components/layout/StudyNavigation';
 
 const InterviewQuestions = () => {
     const [activeTab, setActiveTab] = useState('basics');
+    const [codeOutput, setCodeOutput] = useState('');
 
     const tabs = [
-        { id: 'All', name: 'My All Questions', icon: '🌐' },
+        { id: 'All', name: 'My All Questions', icon: '❓' },
         { id: 'basics', name: 'Web Development', icon: '🌐' },
         { id: 'frontend', name: 'Frontend', icon: '🎨' },
         { id: 'backend', name: 'Backend', icon: '🔧' },
@@ -13,6 +14,83 @@ const InterviewQuestions = () => {
         { id: 'general', name: 'General', icon: '💡' },
         { id: 'behavioral', name: 'Behavioral', icon: '🤝' }
     ];
+
+    const runCode = (code) => {
+        try {
+            // Clear previous output
+            setCodeOutput('');
+            
+            // Create a custom console to capture output
+            const logs = [];
+            const originalLog = console.log;
+            console.log = (...args) => {
+                logs.push(args.map(arg => 
+                    typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
+                ).join(' '));
+                originalLog(...args);
+            };
+
+            // Execute the code
+            // Note: This is a simple eval - in production, you'd want a safer sandbox
+            eval(code);
+            
+            // Restore original console.log
+            console.log = originalLog;
+            
+            // Set output
+            setCodeOutput(logs.join('\n') || 'Code executed successfully (no console output)');
+        } catch (error) {
+            setCodeOutput(`Error: ${error.message}`);
+        }
+    };
+
+    const CodeEditor = ({ example }) => {
+        const [editorCode, setEditorCode] = useState(example.code);
+
+        return (
+            <div className="border rounded-lg overflow-hidden">
+                {/* Editor Header */}
+                <div className="bg-gray-100 border-b px-4 py-2 flex justify-between items-center">
+                    <div className="flex items-center space-x-2">
+                        <div className="w-3 h-3 bg-red-400 rounded-full"></div>
+                        <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
+                        <div className="w-3 h-3 bg-green-400 rounded-full"></div>
+                        <span className="ml-4 text-sm font-medium text-gray-600">editor.js</span>
+                    </div>
+                    <button
+                        onClick={() => runCode(editorCode)}
+                        className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition-colors"
+                    >
+                        ▶ Run Code
+                    </button>
+                </div>
+                
+                {/* Code Editor Area */}
+                <div className="flex">
+                    <div className="flex-1">
+                        <textarea
+                            value={editorCode}
+                            onChange={(e) => setEditorCode(e.target.value)}
+                            className="w-full h-96 p-4 font-mono text-sm bg-gray-900 text-green-400 resize-none focus:outline-none"
+                            spellCheck="false"
+                        />
+                    </div>
+                </div>
+                
+                {/* Output Panel */}
+                <div className="border-t bg-gray-50">
+                    <div className="px-4 py-2 bg-gray-200 border-b">
+                        <span className="text-sm font-medium text-gray-600">Console Output</span>
+                    </div>
+                    <div className="p-4 h-32 overflow-y-auto">
+                        <pre className="text-sm text-gray-800 whitespace-pre-wrap">
+                            {codeOutput || 'Click "Run Code" to see output here...'}
+                        </pre>
+                    </div>
+                </div>
+            </div>
+        );
+    };
 
     const renderTabContent = () => {
         switch (activeTab) {
@@ -28,17 +106,18 @@ const InterviewQuestions = () => {
                     </section>
 
                     <section>
-                        <h3 className="text-xl font-semibold text-gray-800 mb-3">Code Examples Collection</h3>
+                        <h3 className="text-xl font-semibold text-gray-800 mb-3">Interactive Code Examples</h3>
                         <div className="space-y-6">
                             <div className="bg-blue-50 p-6 rounded-lg">
                                 <h4 className="font-semibold text-blue-800 mb-3 text-lg">📊 Array Reduce - User Age Grouping</h4>
                                 <p className="text-blue-700 text-sm mb-3">
                                     Group users by age and count occurrences using Array.reduce method.
                                 </p>
-                                <div className="bg-blue-100 p-3 rounded text-xs">
-                                    <strong>Code Example:</strong>
-                                    <pre className="mt-2 text-blue-800 overflow-x-auto">
-                                        {`const user = [
+                                <CodeEditor example={{
+                                    id: 'array-reduce',
+                                    title: '📊 Array Reduce - User Age Grouping',
+                                    description: 'Group users by age and count occurrences using Array.reduce method.',
+                                    code: `const user = [
   { firstName: "vinod", lastName: "tayde", age: 30 },
   { firstName: "rupali", lastName: "tayde", age: 25 },
   { firstName: "deepika", lastName: "padukone", age: 30 },
@@ -51,9 +130,8 @@ const output = user.reduce(function (acc, curr) {
   return acc;
 }, {});
 
-console.log(output); // { 30: 2, 25: 1, 52: 1 }`}
-                                    </pre>
-                                </div>
+console.log(output); // { 30: 2, 25: 1, 52: 1 }`
+                                }} />
                             </div>
 
                             <div className="bg-green-50 p-6 rounded-lg">
@@ -61,10 +139,11 @@ console.log(output); // { 30: 2, 25: 1, 52: 1 }`}
                                 <p className="text-green-700 text-sm mb-3">
                                     Complete e-commerce flow with promise chaining for order creation and payment processing.
                                 </p>
-                                <div className="bg-green-100 p-3 rounded text-xs">
-                                    <strong>Code Example:</strong>
-                                    <pre className="mt-2 text-green-800 overflow-x-auto">
-                                        {`const cart = ["shoes", "shirt", "phone"];
+                                <CodeEditor example={{
+                                    id: 'promise-chaining',
+                                    title: '🛒 Promise Chaining - E-commerce Flow',
+                                    description: 'Complete e-commerce flow with promise chaining for order creation and payment processing.',
+                                    code: `const cart = ["shoes", "shirt", "phone"];
 
 createOrder(cart)
   .then((orderId) => {
@@ -108,9 +187,8 @@ function proceedToPayment(orderId) {
 
 function validatePaymentStatus(orderId) {
   return false;
-}`}
-                                    </pre>
-                                </div>
+}`
+                                }} />
                             </div>
 
                             <div className="bg-purple-50 p-6 rounded-lg">
@@ -118,10 +196,11 @@ function validatePaymentStatus(orderId) {
                                 <p className="text-purple-700 text-sm mb-3">
                                     Demonstrating different Promise API methods: all, allSettled, race, and any.
                                 </p>
-                                <div className="bg-purple-100 p-3 rounded text-xs">
-                                    <strong>Code Example:</strong>
-                                    <pre className="mt-2 text-purple-800 overflow-x-auto">
-                                        {`const p1 = new Promise((resolve, reject) => {
+                                <CodeEditor example={{
+                                    id: 'promise-apis',
+                                    title: '⚡ Promise APIs - Handling Multiple Promises',
+                                    description: 'Demonstrating different Promise API methods: all, allSettled, race, and any.',
+                                    code: `const p1 = new Promise((resolve, reject) => {
   setTimeout(() => resolve("P1 Successful"), 3000);
 });
 const p2 = new Promise((resolve, reject) => {
@@ -154,9 +233,8 @@ Promise.any([p1, p2, p3])
   .catch((err) => {
     console.error(err);
     console.log(err.errors);
-  });`}
-                                    </pre>
-                                </div>
+  });`
+                                }} />
                             </div>
 
                             <div className="bg-orange-50 p-6 rounded-lg">
@@ -164,10 +242,11 @@ Promise.any([p1, p2, p3])
                                 <p className="text-orange-700 text-sm mb-3">
                                     Modern async/await pattern for handling promises and API calls with error handling.
                                 </p>
-                                <div className="bg-orange-100 p-3 rounded text-xs">
-                                    <strong>Code Example:</strong>
-                                    <pre className="mt-2 text-orange-800 overflow-x-auto">
-                                        {`// Async function always returns a promise
+                                <CodeEditor example={{
+                                    id: 'async-await',
+                                    title: '🎯 Async/Await with API Calls',
+                                    description: 'Modern async/await pattern for handling promises and API calls with error handling.',
+                                    code: `// Async function always returns a promise
 const p = new Promise((resolve, reject) => {
   resolve("promise resolved value");
 });
@@ -207,9 +286,8 @@ async function handleAPIPromise() {
   }
 }
 
-handleAPIPromise();`}
-                                    </pre>
-                                </div>
+handleAPIPromise();`
+                                }} />
                             </div>
 
                             <div className="bg-yellow-50 p-6 rounded-lg">
@@ -217,10 +295,11 @@ handleAPIPromise();`}
                                 <p className="text-yellow-700 text-sm mb-3">
                                     Debouncing technique to optimize performance by limiting function execution frequency.
                                 </p>
-                                <div className="bg-yellow-100 p-3 rounded text-xs">
-                                    <strong>Code Example:</strong>
-                                    <pre className="mt-2 text-yellow-800 overflow-x-auto">
-                                        {`let counter = 1;
+                                <CodeEditor example={{
+                                    id: 'debouncing',
+                                    title: '⏱️ Debouncing Implementation',
+                                    description: 'Debouncing technique to optimize performance by limiting function execution frequency.',
+                                    code: `let counter = 1;
 const apiCall = () => {
   console.log("fetching data...", counter++);
 };
@@ -252,9 +331,12 @@ const debouncing = (fn, delay) => {
 
 const handleKey = debouncing(apiCall, 300);
 
-// Usage: handleKey() will only execute after 300ms of inactivity`}
-                                    </pre>
-                                </div>
+// Usage: handleKey() will only execute after 300ms of inactivity
+console.log("Testing debouncing:");
+handleKey();
+handleKey();
+handleKey(); // Only this will execute after 300ms`
+                                }} />
                             </div>
 
                             <div className="bg-red-50 p-6 rounded-lg">
@@ -262,10 +344,11 @@ const handleKey = debouncing(apiCall, 300);
                                 <p className="text-red-700 text-sm mb-3">
                                     Robust API retry mechanism for handling network failures with exponential backoff.
                                 </p>
-                                <div className="bg-red-100 p-3 rounded text-xs">
-                                    <strong>Code Example:</strong>
-                                    <pre className="mt-2 text-red-800 overflow-x-auto">
-                                        {`// Method 1: Async/Await retry pattern
+                                <CodeEditor example={{
+                                    id: 'api-retry',
+                                    title: '🔄 API Retry Pattern',
+                                    description: 'Robust API retry mechanism for handling network failures with exponential backoff.',
+                                    code: `// Method 1: Async/Await retry pattern
 function value() {
   return new Promise((resolve, reject) => {
     var num = Math.floor(Math.random() * 100);
@@ -296,56 +379,14 @@ async function apiCall(callback, retry = 6, time = 5000) {
         return \`Final Result after \${retry} is \${error}\`;
       }
 
-      console.log(\`Waiting for \${retry / 1000} seconds before retry...\`);
+      console.log(\`Waiting for \${time / 1000} seconds before retry...\`);
       await delay(time);
     }
   }
 }
 
-apiCall(value).then((x) => console.log('Final output', x));
-
-// Method 2: Promise-based retry with timer
-let cb = function(result) {
-  console.log("result", result);
-};
-let delay2 = 1000;
-let retries = 9;
-let timer;
-
-function apiCall2() {
-  return new Promise((resolve, reject) => {
-    const apiStatus = 500;
-    if (apiStatus == 200) {
-      return resolve({
-        message: "success",
-        user: {},
-        status: apiStatus
-      });
-    }
-
-    return reject({
-      message: "failed",
-      status: apiStatus
-    });
-  });
-}
-
-function retry(cb, retries, delay) {
-  apiCall2().then((res) => {
-    cb(res);
-  }).catch(() => {
-    clearTimeout(timer);
-    if (retries === 0) return "Failed";
-    console.log(retries);
-    timer = setTimeout(() => {
-      retry(cb, retries - 1, delay);
-    }, delay);
-  });
-}
-
-retry(cb, retries, delay2);`}
-                                    </pre>
-                                </div>
+apiCall(value).then((x) => console.log('Final output', x));`
+                                }} />
                             </div>
                         </div>
                     </section>
