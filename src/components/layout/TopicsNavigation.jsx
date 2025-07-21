@@ -1,6 +1,6 @@
 import { Link, useLocation } from 'react-router-dom';
 
-const StudyNavigation = () => {
+const TopicsNavigation = () => {
   const location = useLocation();
 
   const studyTopics = [
@@ -62,4 +62,4 @@ const StudyNavigation = () => {
   );
 };
 
-export default StudyNavigation;
+export default TopicsNavigation;

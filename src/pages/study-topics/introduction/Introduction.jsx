@@ -1,4 +1,4 @@
-import StudyNavigation from '../../../components/layout/StudyNavigation';
+import TopicsNavigation from '../../../components/layout/TopicsNavigation';
 
 const Introduction = () => {
   return (
@@ -65,7 +65,7 @@ const Introduction = () => {
         </section>
       </div>
       
-      <StudyNavigation />
+      <TopicsNavigation />
     </div>
   );
 };

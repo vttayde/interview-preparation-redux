@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import StudyNavigation from '../../../components/layout/StudyNavigation';
+import TopicsNavigation from '../../../components/layout/TopicsNavigation';
 
 const Database = () => {
     const [activeTab, setActiveTab] = useState('basics');
@@ -406,8 +406,8 @@ async function connectToMySQL() {
                     {renderTabContent()}
                 </div>
             </div>
-            
-            <StudyNavigation />
+
+            <TopicsNavigation />
         </div>
     );
 };

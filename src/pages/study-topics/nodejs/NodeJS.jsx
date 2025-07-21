@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import StudyNavigation from '../../../components/layout/StudyNavigation';
+import TopicsNavigation from '../../../components/layout/TopicsNavigation';
 
 const NodeJS = () => {
     const [activeTab, setActiveTab] = useState('basics');
@@ -355,7 +355,7 @@ app.listen(3000, () => {
                 </div>
             </div>
             
-            <StudyNavigation />
+            <TopicsNavigation />
         </div>
     );
 };

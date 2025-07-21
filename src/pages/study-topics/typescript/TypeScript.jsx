@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import StudyNavigation from '../../../components/layout/StudyNavigation';
+import TopicsNavigation from '../../../components/layout/TopicsNavigation';
 
 const TypeScript = () => {
     const [activeTab, setActiveTab] = useState('basics');
@@ -1424,7 +1424,7 @@ function handlePet(pet: Pet) {
                 </div>
             </div>
             
-            <StudyNavigation />
+            <TopicsNavigation />
         </div>
     );
 };

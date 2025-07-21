@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import StudyNavigation from '../../../components/layout/StudyNavigation';
+import TopicsNavigation from '../../../components/layout/TopicsNavigation';
 
 const ReactJS = () => {
     const [activeTab, setActiveTab] = useState('basics');
@@ -1029,7 +1029,7 @@ dispatch({ type: 'INCREMENT' });`}
                 {renderTabContent()}
             </div>
 
-            <StudyNavigation />
+            <TopicsNavigation />
         </div>
     );
 };

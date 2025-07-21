@@ -1,4 +1,4 @@
-import StudyNavigation from '../../../components/layout/StudyNavigation';
+import TopicsNavigation from '../../../components/layout/TopicsNavigation';
 
 const Projects = () => {
   return (
@@ -292,7 +292,7 @@ const Projects = () => {
         </section>
       </div>
       
-      <StudyNavigation />
+      <TopicsNavigation />
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import StudyNavigation from '../../../components/layout/StudyNavigation';
+import TopicsNavigation from '../../../components/layout/TopicsNavigation';
 
 const CSS = () => {
     const [activeTab, setActiveTab] = useState('basics');
@@ -1078,7 +1078,7 @@ h1 { } /* 0,0,0,1 = 1 */
                 {renderTabContent()}
             </div>
 
-            <StudyNavigation />
+            <TopicsNavigation />
         </div>
     );
 };

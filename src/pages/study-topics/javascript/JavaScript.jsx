@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import StudyNavigation from '../../../components/layout/StudyNavigation';
+import TopicsNavigation from '../../../components/layout/TopicsNavigation';
 
 const JavaScript = () => {
     const [activeTab, setActiveTab] = useState('basics');
@@ -1003,7 +1003,7 @@ promise
                 {renderTabContent()}
             </div>
 
-            <StudyNavigation />
+            <TopicsNavigation />
         </div>
     );
 };
