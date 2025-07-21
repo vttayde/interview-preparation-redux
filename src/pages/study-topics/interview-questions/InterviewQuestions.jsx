@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import { useOutletContext } from 'react-router-dom';
 import StudyNavigation from '../../../components/layout/StudyNavigation';
+import TryCodeButton from '../../../components/TryCodeButton';
+import CodeDisplay from '../../../components/CodeDisplay';
 
 const InterviewQuestions = () => {
-    const [activeTab, setActiveTab] = useState('basics');
-    const [codeOutput, setCodeOutput] = useState('');
+    const [activeTab, setActiveTab] = useState('All');
+    const { openTerminal } = useOutletContext();
 
     const tabs = [
         { id: 'All', name: 'My All Questions', icon: '❓' },
@@ -14,83 +17,6 @@ const InterviewQuestions = () => {
         { id: 'general', name: 'General', icon: '💡' },
         { id: 'behavioral', name: 'Behavioral', icon: '🤝' }
     ];
-
-    const runCode = (code) => {
-        try {
-            // Clear previous output
-            setCodeOutput('');
-            
-            // Create a custom console to capture output
-            const logs = [];
-            const originalLog = console.log;
-            console.log = (...args) => {
-                logs.push(args.map(arg => 
-                    typeof arg === 'object' ? JSON.stringify(arg, null, 2) : String(arg)
-                ).join(' '));
-                originalLog(...args);
-            };
-
-            // Execute the code
-            // Note: This is a simple eval - in production, you'd want a safer sandbox
-            eval(code);
-            
-            // Restore original console.log
-            console.log = originalLog;
-            
-            // Set output
-            setCodeOutput(logs.join('\n') || 'Code executed successfully (no console output)');
-        } catch (error) {
-            setCodeOutput(`Error: ${error.message}`);
-        }
-    };
-
-    const CodeEditor = ({ example }) => {
-        const [editorCode, setEditorCode] = useState(example.code);
-
-        return (
-            <div className="border rounded-lg overflow-hidden">
-                {/* Editor Header */}
-                <div className="bg-gray-100 border-b px-4 py-2 flex justify-between items-center">
-                    <div className="flex items-center space-x-2">
-                        <div className="w-3 h-3 bg-red-400 rounded-full"></div>
-                        <div className="w-3 h-3 bg-yellow-400 rounded-full"></div>
-                        <div className="w-3 h-3 bg-green-400 rounded-full"></div>
-                        <span className="ml-4 text-sm font-medium text-gray-600">editor.js</span>
-                    </div>
-                    <button
-                        onClick={() => runCode(editorCode)}
-                        className="px-3 py-1 bg-blue-500 text-white text-sm rounded hover:bg-blue-600 transition-colors"
-                    >
-                        ▶ Run Code
-                    </button>
-                </div>
-                
-                {/* Code Editor Area */}
-                <div className="flex">
-                    <div className="flex-1">
-                        <textarea
-                            value={editorCode}
-                            onChange={(e) => setEditorCode(e.target.value)}
-                            className="w-full h-96 p-4 font-mono text-sm bg-gray-900 text-green-400 resize-none focus:outline-none"
-                            spellCheck="false"
-                        />
-                    </div>
-                </div>
-                
-                {/* Output Panel */}
-                <div className="border-t bg-gray-50">
-                    <div className="px-4 py-2 bg-gray-200 border-b">
-                        <span className="text-sm font-medium text-gray-600">Console Output</span>
-                    </div>
-                    <div className="p-4 h-32 overflow-y-auto">
-                        <pre className="text-sm text-gray-800 whitespace-pre-wrap">
-                            {codeOutput || 'Click "Run Code" to see output here...'}
-                        </pre>
-                    </div>
-                </div>
-            </div>
-        );
-    };
 
     const renderTabContent = () => {
         switch (activeTab) {
@@ -113,11 +39,9 @@ const InterviewQuestions = () => {
                                 <p className="text-blue-700 text-sm mb-3">
                                     Group users by age and count occurrences using Array.reduce method.
                                 </p>
-                                <CodeEditor example={{
-                                    id: 'array-reduce',
-                                    title: '📊 Array Reduce - User Age Grouping',
-                                    description: 'Group users by age and count occurrences using Array.reduce method.',
-                                    code: `const user = [
+                                <div className="mb-3">
+                                    <CodeDisplay 
+                                        code={`const user = [
   { firstName: "vinod", lastName: "tayde", age: 30 },
   { firstName: "rupali", lastName: "tayde", age: 25 },
   { firstName: "deepika", lastName: "padukone", age: 30 },
@@ -130,8 +54,28 @@ const output = user.reduce(function (acc, curr) {
   return acc;
 }, {});
 
-console.log(output); // { 30: 2, 25: 1, 52: 1 }`
-                                }} />
+console.log(output); // { 30: 2, 25: 1, 52: 1 }`}
+                                        language="javascript"
+                                    />
+                                </div>
+                                <TryCodeButton 
+                                    codeSnippet={`const user = [
+  { firstName: "vinod", lastName: "tayde", age: 30 },
+  { firstName: "rupali", lastName: "tayde", age: 25 },
+  { firstName: "deepika", lastName: "padukone", age: 30 },
+  { firstName: "akshya", lastName: "kumar", age: 52 },
+];
+
+const output = user.reduce(function (acc, curr) {
+  // Count users by age
+  acc[curr.age] = (acc[curr.age] || 0) + 1;
+  return acc;
+}, {});
+
+console.log(output); // { 30: 2, 25: 1, 52: 1 }`}
+                                    onOpenTerminal={openTerminal}
+                                    title="Try Array Reduce Example"
+                                />
                             </div>
 
                             <div className="bg-green-50 p-6 rounded-lg">
@@ -139,11 +83,55 @@ console.log(output); // { 30: 2, 25: 1, 52: 1 }`
                                 <p className="text-green-700 text-sm mb-3">
                                     Complete e-commerce flow with promise chaining for order creation and payment processing.
                                 </p>
-                                <CodeEditor example={{
-                                    id: 'promise-chaining',
-                                    title: '🛒 Promise Chaining - E-commerce Flow',
-                                    description: 'Complete e-commerce flow with promise chaining for order creation and payment processing.',
-                                    code: `const cart = ["shoes", "shirt", "phone"];
+                                <div className="mb-3">
+                                    <CodeDisplay 
+                                        code={`const cart = ["shoes", "shirt", "phone"];
+
+createOrder(cart)
+  .then((orderId) => {
+    console.log(orderId);
+    return orderId;
+  })
+  .then((orderId) => {
+    return proceedToPayment(orderId);
+  })
+  .then((paymentInfo) => console.log(paymentInfo))
+  .catch((error) => console.log(error.message));
+
+function createOrder(cart) {
+  const pr = new Promise((resolve, reject) => {
+    if (!validateCart(cart)) {
+      const err = new Error("cart is not valid");
+      reject(err);
+    }
+    const orderId = "123445";
+    if (orderId) {
+      setTimeout(() => resolve(orderId), 5000);
+    }
+  });
+  return pr;
+}
+
+function validateCart(cart) {
+  return true;
+}
+
+function proceedToPayment(orderId) {
+  return new Promise((resolve, reject) => {
+    validatePaymentStatus(orderId)
+      ? resolve("Payment Successful")
+      : reject(new Error("Payment fail"));
+  });
+}
+
+function validatePaymentStatus(orderId) {
+  return false;
+}`}
+                                        language="javascript"
+                                    />
+                                </div>
+                                <TryCodeButton 
+                                    codeSnippet={`const cart = ["shoes", "shirt", "phone"];
 
 createOrder(cart)
   .then((orderId) => {
@@ -187,8 +175,10 @@ function proceedToPayment(orderId) {
 
 function validatePaymentStatus(orderId) {
   return false;
-}`
-                                }} />
+}`}
+                                    onOpenTerminal={openTerminal}
+                                    title="Try Promise Chaining Example"
+                                />
                             </div>
 
                             <div className="bg-purple-50 p-6 rounded-lg">
@@ -196,11 +186,31 @@ function validatePaymentStatus(orderId) {
                                 <p className="text-purple-700 text-sm mb-3">
                                     Demonstrating different Promise API methods: all, allSettled, race, and any.
                                 </p>
-                                <CodeEditor example={{
-                                    id: 'promise-apis',
-                                    title: '⚡ Promise APIs - Handling Multiple Promises',
-                                    description: 'Demonstrating different Promise API methods: all, allSettled, race, and any.',
-                                    code: `const p1 = new Promise((resolve, reject) => {
+                                <div className="mb-3">
+                                    <CodeDisplay 
+                                        code={`const p1 = new Promise((resolve, reject) => {
+  setTimeout(() => resolve("P1 Successful"), 3000);
+});
+const p2 = new Promise((resolve, reject) => {
+  setTimeout(() => reject("P2 fail"), 1000);
+});
+const p3 = new Promise((resolve, reject) => {
+  setTimeout(() => resolve("P3 Successful"), 2000);
+});
+
+// Promise.all() - Fails if any promise fails
+Promise.all([p1, p2, p3])
+  .then((res) => console.log("res", res))
+  .catch((err) => console.error(err));
+
+// Promise.allSettled() - Waits for all to settle
+Promise.allSettled([p1, p2, p3])
+  .then((res) => console.log("res allSettled", res));`}
+                                        language="javascript"
+                                    />
+                                </div>
+                                <TryCodeButton 
+                                    codeSnippet={`const p1 = new Promise((resolve, reject) => {
   setTimeout(() => resolve("P1 Successful"), 3000);
 });
 const p2 = new Promise((resolve, reject) => {
@@ -233,8 +243,10 @@ Promise.any([p1, p2, p3])
   .catch((err) => {
     console.error(err);
     console.log(err.errors);
-  });`
-                                }} />
+  });`}
+                                    onOpenTerminal={openTerminal}
+                                    title="Try Promise APIs Example"
+                                />
                             </div>
 
                             <div className="bg-orange-50 p-6 rounded-lg">
@@ -242,11 +254,37 @@ Promise.any([p1, p2, p3])
                                 <p className="text-orange-700 text-sm mb-3">
                                     Modern async/await pattern for handling promises and API calls with error handling.
                                 </p>
-                                <CodeEditor example={{
-                                    id: 'async-await',
-                                    title: '🎯 Async/Await with API Calls',
-                                    description: 'Modern async/await pattern for handling promises and API calls with error handling.',
-                                    code: `// Async function always returns a promise
+                                <div className="mb-3">
+                                    <CodeDisplay 
+                                        code={`// Async function always returns a promise
+const p = new Promise((resolve, reject) => {
+  resolve("promise resolved value");
+});
+
+async function getData() {
+  return p;
+}
+
+const dataPromise = getData();
+dataPromise.then((res) => console.log(res));
+
+// API call with error handling
+const API_URL = "https://api.github.com/users/vttayde";
+
+async function handleAPIPromise() {
+  try {
+    const data = await fetch(API_URL);
+    const jsonValue = await data.json();
+    console.log("response", jsonValue);
+  } catch (err) {
+    console.log(err.message);
+  }
+}`}
+                                        language="javascript"
+                                    />
+                                </div>
+                                <TryCodeButton 
+                                    codeSnippet={`// Async function always returns a promise
 const p = new Promise((resolve, reject) => {
   resolve("promise resolved value");
 });
@@ -260,7 +298,7 @@ dataPromise.then((res) => console.log(res));
 
 // Async/Await with API calls
 const p2 = new Promise((resolve, reject) => {
-  setTimeout(() => resolve("promise resolved value"), 10000);
+  setTimeout(() => resolve("promise resolved value"), 3000);
 });
 
 async function handlePromise() {
@@ -286,8 +324,9 @@ async function handleAPIPromise() {
   }
 }
 
-handleAPIPromise();`
-                                }} />
+handleAPIPromise();`}
+                                    onOpenTerminal={openTerminal} title="Try Async/Await Example"
+                                />
                             </div>
 
                             <div className="bg-yellow-50 p-6 rounded-lg">
@@ -295,11 +334,32 @@ handleAPIPromise();`
                                 <p className="text-yellow-700 text-sm mb-3">
                                     Debouncing technique to optimize performance by limiting function execution frequency.
                                 </p>
-                                <CodeEditor example={{
-                                    id: 'debouncing',
-                                    title: '⏱️ Debouncing Implementation',
-                                    description: 'Debouncing technique to optimize performance by limiting function execution frequency.',
-                                    code: `let counter = 1;
+                                <div className="mb-3">
+                                    <CodeDisplay 
+                                        code={`// Basic debouncing implementation
+const debouncing = (fn, delay) => {
+  let timer;
+  return function () {
+    let context = this, args = arguments;
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn.apply(context, args);
+    }, delay);
+  };
+};
+
+const apiCall = () => console.log("API Call executed");
+const debouncedCall = debouncing(apiCall, 300);
+
+// Multiple quick calls - only last one executes
+debouncedCall();
+debouncedCall();
+debouncedCall();`}
+                                        language="javascript"
+                                    />
+                                </div>
+                                <TryCodeButton 
+                                    codeSnippet={`let counter = 1;
 const apiCall = () => {
   console.log("fetching data...", counter++);
 };
@@ -331,12 +391,24 @@ const debouncing = (fn, delay) => {
 
 const handleKey = debouncing(apiCall, 300);
 
-// Usage: handleKey() will only execute after 300ms of inactivity
-console.log("Testing debouncing:");
-handleKey();
-handleKey();
-handleKey(); // Only this will execute after 300ms`
-                                }} />
+// Test the debouncing
+console.log("Testing debouncing...");
+handleKey(); // This will execute after 300ms
+handleKey(); // This cancels the previous one
+handleKey(); // Only this final call will execute
+
+// Simulate search input
+const searchAPI = debouncing((query) => {
+  console.log(\`Searching for: \${query}\`);
+}, 500);
+
+console.log("Simulating search...");
+searchAPI("j");
+searchAPI("ja");
+searchAPI("jav");
+searchAPI("javascript"); // Only this executes`}
+                                    onOpenTerminal={openTerminal} title="Try Debouncing Example"
+                                />
                             </div>
 
                             <div className="bg-red-50 p-6 rounded-lg">
@@ -344,11 +416,30 @@ handleKey(); // Only this will execute after 300ms`
                                 <p className="text-red-700 text-sm mb-3">
                                     Robust API retry mechanism for handling network failures with exponential backoff.
                                 </p>
-                                <CodeEditor example={{
-                                    id: 'api-retry',
-                                    title: '🔄 API Retry Pattern',
-                                    description: 'Robust API retry mechanism for handling network failures with exponential backoff.',
-                                    code: `// Method 1: Async/Await retry pattern
+                                <div className="mb-3">
+                                    <CodeDisplay 
+                                        code={`// API Retry with exponential backoff
+async function apiCall(callback, maxRetries = 3) {
+  for (let i = 0; i <= maxRetries; i++) {
+    try {
+      const response = await callback();
+      console.log(\`Success on attempt \${i + 1}\`);
+      return response;
+    } catch (error) {
+      if (i === maxRetries) {
+        throw new Error(\`Failed after \${maxRetries + 1} attempts\`);
+      }
+      const delay = Math.pow(2, i) * 1000; // Exponential backoff
+      console.log(\`Attempt \${i + 1} failed, retrying in \${delay}ms\`);
+      await new Promise(resolve => setTimeout(resolve, delay));
+    }
+  }
+}`}
+                                        language="javascript"
+                                    />
+                                </div>
+                                <TryCodeButton 
+                                    codeSnippet={`// Method 1: Async/Await retry pattern
 function value() {
   return new Promise((resolve, reject) => {
     var num = Math.floor(Math.random() * 100);
@@ -385,8 +476,48 @@ async function apiCall(callback, retry = 6, time = 5000) {
   }
 }
 
-apiCall(value).then((x) => console.log('Final output', x));`
-                                }} />
+apiCall(value).then((x) => console.log('Final output', x));
+
+// Method 2: Promise-based retry with exponential backoff
+function exponentialBackoffRetry(apiFunction, maxRetries = 3) {
+  return new Promise((resolve, reject) => {
+    let retryCount = 0;
+    
+    function attempt() {
+      apiFunction()
+        .then(resolve)
+        .catch(error => {
+          retryCount++;
+          if (retryCount >= maxRetries) {
+            reject(new Error(\`Max retries (\${maxRetries}) exceeded: \${error.message}\`));
+          } else {
+            const delay = Math.pow(2, retryCount - 1) * 1000; // 1s, 2s, 4s...
+            console.log(\`Retry \${retryCount}/\${maxRetries} in \${delay}ms\`);
+            setTimeout(attempt, delay);
+          }
+        });
+    }
+    
+    attempt();
+  });
+}
+
+// Test the retry function
+const unreliableAPI = () => {
+  return new Promise((resolve, reject) => {
+    if (Math.random() < 0.3) { // 30% success rate
+      resolve("API call successful!");
+    } else {
+      reject(new Error("Network error"));
+    }
+  });
+};
+
+exponentialBackoffRetry(unreliableAPI, 4)
+  .then(result => console.log("Final result:", result))
+  .catch(error => console.log("Failed:", error.message));`}
+                                    onOpenTerminal={openTerminal} title="Try API Retry Example"
+                                />
                             </div>
                         </div>
                     </section>
