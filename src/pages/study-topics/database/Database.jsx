@@ -1,288 +1,415 @@
+import { useState } from 'react';
+import StudyNavigation from '../../../components/layout/StudyNavigation';
+
 const Database = () => {
-  return (
-    <div className="bg-white shadow rounded-lg p-6">
-      <div className="border-b border-gray-200 pb-4 mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">Database</h1>
-        <p className="mt-2 text-gray-600">Data storage and management systems</p>
-      </div>
+    const [activeTab, setActiveTab] = useState('basics');
 
-      <div className="space-y-6">
-        <section>
-          <h2 className="text-2xl font-semibold text-gray-800 mb-4">Database Types</h2>
-          <p className="text-gray-600 mb-4">
-            Databases are organized collections of data that can be easily accessed, managed, and updated.
-            There are two main types: SQL (relational) and NoSQL (non-relational) databases.
-          </p>
-        </section>
+    const tabs = [
+        { id: 'basics', name: 'Database Fundamentals', icon: '🗄️' },
+        { id: 'sql', name: 'SQL Queries', icon: '📝' },
+        { id: 'nosql', name: 'NoSQL Databases', icon: '🍃' },
+        { id: 'design', name: 'Database Design', icon: '🎨' },
+        { id: 'examples', name: 'Code Examples', icon: '💻' },
+        { id: 'interview', name: 'Interview Q&A', icon: '❓' }
+    ];
 
-        <section>
-          <h3 className="text-xl font-semibold text-gray-800 mb-3">SQL vs NoSQL</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-blue-800 mb-2">SQL Databases</h4>
-              <p className="text-blue-700 text-sm mb-2">Structured data with fixed schema</p>
-              <ul className="text-blue-700 text-sm space-y-1">
-                <li>MySQL, PostgreSQL, SQLite</li>
-                <li>ACID properties</li>
-                <li>Complex queries with JOINs</li>
-                <li>Vertical scaling</li>
-              </ul>
-            </div>
-            <div className="bg-green-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-green-800 mb-2">NoSQL Databases</h4>
-              <p className="text-green-700 text-sm mb-2">Flexible schema for unstructured data</p>
-              <ul className="text-green-700 text-sm space-y-1">
-                <li>MongoDB, Redis, Cassandra</li>
-                <li>Eventual consistency</li>
-                <li>Document, key-value, column</li>
-                <li>Horizontal scaling</li>
-              </ul>
-            </div>
-          </div>
-        </section>
+    const renderTabContent = () => {
+        switch (activeTab) {
+            case 'basics':
+                return (
+                    <div className="space-y-6">
+                        <section>
+                            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Database Fundamentals</h2>
+                            <p className="text-gray-600 mb-4">
+                                Databases are organized collections of data that can be easily accessed, managed, and updated.
+                                They are essential for storing and retrieving information in applications.
+                            </p>
+                        </section>
 
-        <section>
-          <h3 className="text-xl font-semibold text-gray-800 mb-3">SQL Fundamentals</h3>
-          <div className="space-y-4">
-            <div className="border-l-4 border-blue-500 pl-4">
-              <h4 className="font-semibold text-gray-800">CRUD Operations</h4>
-              <p className="text-gray-600 text-sm">CREATE, READ, UPDATE, DELETE - basic database operations</p>
-            </div>
-            <div className="border-l-4 border-green-500 pl-4">
-              <h4 className="font-semibold text-gray-800">Relationships</h4>
-              <p className="text-gray-600 text-sm">One-to-one, one-to-many, many-to-many relationships</p>
-            </div>
-            <div className="border-l-4 border-yellow-500 pl-4">
-              <h4 className="font-semibold text-gray-800">Normalization</h4>
-              <p className="text-gray-600 text-sm">1NF, 2NF, 3NF - reducing data redundancy</p>
-            </div>
-            <div className="border-l-4 border-purple-500 pl-4">
-              <h4 className="font-semibold text-gray-800">Indexing</h4>
-              <p className="text-gray-600 text-sm">Improve query performance with proper indexing</p>
-            </div>
-          </div>
-        </section>
+                        <section>
+                            <h3 className="text-xl font-semibold text-gray-800 mb-3">Types of Databases</h3>
+                            <div className="space-y-6">
+                                <div className="bg-blue-50 p-6 rounded-lg">
+                                    <h4 className="font-semibold text-blue-800 mb-3 text-lg">🏗️ Relational Databases (SQL)</h4>
+                                    <p className="text-blue-700 text-sm mb-3">
+                                        Store data in tables with rows and columns, using relationships between tables.
+                                    </p>
+                                    <div className="bg-blue-100 p-3 rounded text-xs">
+                                        <strong>Popular SQL Databases:</strong>
+                                        <ul className="mt-2 text-blue-800 space-y-1">
+                                            <li>• MySQL - Open source, widely used</li>
+                                            <li>• PostgreSQL - Advanced features, standards compliant</li>
+                                            <li>• SQLite - Lightweight, file-based</li>
+                                            <li>• Oracle - Enterprise-grade</li>
+                                            <li>• SQL Server - Microsoft's solution</li>
+                                        </ul>
+                                    </div>
+                                </div>
 
-        <section>
-          <h3 className="text-xl font-semibold text-gray-800 mb-3">SQL Examples</h3>
-          <div className="space-y-4">
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h4 className="font-semibold mb-2">Basic SQL Queries</h4>
-              <pre className="text-sm text-gray-700 overflow-x-auto">
-{`-- Create table
-CREATE TABLE users (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(100) NOT NULL,
-  email VARCHAR(255) UNIQUE NOT NULL,
-  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-);
+                                <div className="bg-green-50 p-6 rounded-lg">
+                                    <h4 className="font-semibold text-green-800 mb-3 text-lg">🍃 NoSQL Databases</h4>
+                                    <p className="text-green-700 text-sm mb-3">
+                                        Non-relational databases that store data in flexible formats like documents, key-value pairs, or graphs.
+                                    </p>
+                                    <div className="bg-green-100 p-3 rounded text-xs">
+                                        <strong>Types & Examples:</strong>
+                                        <ul className="mt-2 text-green-800 space-y-1">
+                                            <li>• Document: MongoDB, CouchDB</li>
+                                            <li>• Key-Value: Redis, DynamoDB</li>
+                                            <li>• Column: Cassandra, HBase</li>
+                                            <li>• Graph: Neo4j, Amazon Neptune</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
 
--- Insert data
-INSERT INTO users (name, email) VALUES 
-  ('John Doe', 'john@example.com'),
-  ('Jane Smith', 'jane@example.com');
+                        <section>
+                            <h3 className="text-xl font-semibold text-gray-800 mb-3">ACID Properties</h3>
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <div className="bg-purple-50 p-4 rounded-lg">
+                                    <h4 className="font-semibold text-purple-800 mb-2">Atomicity</h4>
+                                    <p className="text-purple-700 text-sm">All operations in a transaction succeed or fail together</p>
+                                </div>
+                                <div className="bg-red-50 p-4 rounded-lg">
+                                    <h4 className="font-semibold text-red-800 mb-2">Consistency</h4>
+                                    <p className="text-red-700 text-sm">Database remains in valid state before and after transaction</p>
+                                </div>
+                                <div className="bg-yellow-50 p-4 rounded-lg">
+                                    <h4 className="font-semibold text-yellow-800 mb-2">Isolation</h4>
+                                    <p className="text-yellow-700 text-sm">Concurrent transactions don't interfere with each other</p>
+                                </div>
+                                <div className="bg-indigo-50 p-4 rounded-lg">
+                                    <h4 className="font-semibold text-indigo-800 mb-2">Durability</h4>
+                                    <p className="text-indigo-700 text-sm">Committed changes persist even if system fails</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                );
 
--- Select with conditions
-SELECT * FROM users 
-WHERE created_at >= '2024-01-01' 
-ORDER BY name ASC;
+            case 'sql':
+                return (
+                    <div className="space-y-6">
+                        <section>
+                            <h2 className="text-2xl font-semibold text-gray-800 mb-4">SQL Queries</h2>
+                            <p className="text-gray-600 mb-4">
+                                Structured Query Language (SQL) is used to communicate with relational databases.
+                            </p>
+                        </section>
 
--- Update data
-UPDATE users 
-SET name = 'John Updated' 
-WHERE email = 'john@example.com';
+                        <section>
+                            <h3 className="text-xl font-semibold text-gray-800 mb-3">Basic SQL Operations</h3>
+                            <div className="space-y-4">
+                                <div className="bg-blue-50 p-6 rounded-lg">
+                                    <h4 className="font-semibold text-blue-800 mb-3">SELECT Queries</h4>
+                                    <div className="bg-blue-100 p-3 rounded text-xs">
+                                        <pre className="text-blue-800">
+{`-- Basic SELECT
+SELECT * FROM users;
+SELECT name, email FROM users;
 
--- Delete data
-DELETE FROM users 
-WHERE id = 1;`}
-              </pre>
-            </div>
-            
-            <div className="bg-gray-50 p-4 rounded-lg">
-              <h4 className="font-semibold mb-2">Advanced SQL</h4>
-              <pre className="text-sm text-gray-700 overflow-x-auto">
-{`-- JOINs
+-- WHERE clause
+SELECT * FROM users WHERE age > 18;
+SELECT * FROM users WHERE city = 'New York';
+
+-- ORDER BY
+SELECT * FROM users ORDER BY name ASC;
+SELECT * FROM users ORDER BY age DESC, name ASC;
+
+-- LIMIT
+SELECT * FROM users LIMIT 10;
+SELECT * FROM users LIMIT 10 OFFSET 20;`}
+                                        </pre>
+                                    </div>
+                                </div>
+
+                                <div className="bg-green-50 p-6 rounded-lg">
+                                    <h4 className="font-semibold text-green-800 mb-3">INSERT, UPDATE, DELETE</h4>
+                                    <div className="bg-green-100 p-3 rounded text-xs">
+                                        <pre className="text-green-800">
+{`-- INSERT
+INSERT INTO users (name, email, age) 
+VALUES ('John Doe', 'john@example.com', 25);
+
+-- Multiple inserts
+INSERT INTO users (name, email, age) VALUES 
+('Alice', 'alice@example.com', 30),
+('Bob', 'bob@example.com', 28);
+
+-- UPDATE
+UPDATE users SET age = 26 WHERE name = 'John Doe';
+UPDATE users SET city = 'Boston' WHERE age > 25;
+
+-- DELETE
+DELETE FROM users WHERE age < 18;
+DELETE FROM users WHERE city IS NULL;`}
+                                        </pre>
+                                    </div>
+                                </div>
+
+                                <div className="bg-purple-50 p-6 rounded-lg">
+                                    <h4 className="font-semibold text-purple-800 mb-3">JOINs</h4>
+                                    <div className="bg-purple-100 p-3 rounded text-xs">
+                                        <pre className="text-purple-800">
+{`-- INNER JOIN
 SELECT u.name, p.title 
-FROM users u
+FROM users u 
 INNER JOIN posts p ON u.id = p.user_id;
 
--- Aggregation
-SELECT COUNT(*) as user_count, 
-       AVG(age) as avg_age 
-FROM users 
-GROUP BY city 
-HAVING COUNT(*) > 5;
+-- LEFT JOIN
+SELECT u.name, p.title 
+FROM users u 
+LEFT JOIN posts p ON u.id = p.user_id;
 
--- Subqueries
-SELECT name FROM users 
-WHERE id IN (
-  SELECT user_id FROM orders 
-  WHERE total > 1000
-);
+-- RIGHT JOIN
+SELECT u.name, p.title 
+FROM users u 
+RIGHT JOIN posts p ON u.id = p.user_id;
 
--- Window functions
-SELECT name, salary,
-  RANK() OVER (ORDER BY salary DESC) as salary_rank
-FROM employees;`}
-              </pre>
-            </div>
-          </div>
-        </section>
+-- FULL OUTER JOIN
+SELECT u.name, p.title 
+FROM users u 
+FULL OUTER JOIN posts p ON u.id = p.user_id;`}
+                                        </pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                );
 
-        <section>
-          <h3 className="text-xl font-semibold text-gray-800 mb-3">MongoDB Examples</h3>
-          <div className="bg-gray-50 p-4 rounded-lg">
-            <pre className="text-sm text-gray-700 overflow-x-auto">
-{`// Insert documents
+            case 'nosql':
+                return (
+                    <div className="space-y-6">
+                        <section>
+                            <h2 className="text-2xl font-semibold text-gray-800 mb-4">NoSQL Databases</h2>
+                            <p className="text-gray-600 mb-4">
+                                NoSQL databases provide flexible data models for modern applications.
+                            </p>
+                        </section>
+
+                        <section>
+                            <h3 className="text-xl font-semibold text-gray-800 mb-3">MongoDB Examples</h3>
+                            <div className="space-y-4">
+                                <div className="bg-green-50 p-6 rounded-lg">
+                                    <h4 className="font-semibold text-green-800 mb-3">Basic Operations</h4>
+                                    <div className="bg-green-100 p-3 rounded text-xs">
+                                        <pre className="text-green-800">
+{`// Insert document
 db.users.insertOne({
-  name: "John Doe",
-  email: "john@example.com",
-  age: 30,
-  interests: ["coding", "reading"]
+    name: "John Doe",
+    email: "john@example.com",
+    age: 25
 });
 
 // Find documents
-db.users.find({ age: { $gte: 18 } });
+db.users.find({ age: { $gt: 18 } });
+db.users.findOne({ email: "john@example.com" });
 
-// Update documents
+// Update document
 db.users.updateOne(
-  { email: "john@example.com" },
-  { $set: { age: 31 }, $push: { interests: "gaming" } }
+    { email: "john@example.com" },
+    { $set: { age: 26 } }
 );
 
-// Aggregation pipeline
-db.users.aggregate([
-  { $match: { age: { $gte: 18 } } },
-  { $group: { _id: "$city", count: { $sum: 1 } } },
-  { $sort: { count: -1 } }
-]);
+// Delete document
+db.users.deleteOne({ email: "john@example.com" });`}
+                                        </pre>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                );
 
-// Create index
-db.users.createIndex({ email: 1 });`}
-            </pre>
-          </div>
-        </section>
+            case 'design':
+                return (
+                    <div className="space-y-6">
+                        <section>
+                            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Database Design</h2>
+                            <div className="grid md:grid-cols-2 gap-4">
+                                <div className="bg-blue-50 p-4 rounded-lg">
+                                    <h4 className="font-semibold text-blue-800 mb-2">Normalization</h4>
+                                    <p className="text-blue-700 text-sm">Organize data to reduce redundancy and improve integrity</p>
+                                </div>
+                                <div className="bg-green-50 p-4 rounded-lg">
+                                    <h4 className="font-semibold text-green-800 mb-2">Indexing</h4>
+                                    <p className="text-green-700 text-sm">Improve query performance with proper indexes</p>
+                                </div>
+                                <div className="bg-purple-50 p-4 rounded-lg">
+                                    <h4 className="font-semibold text-purple-800 mb-2">Relationships</h4>
+                                    <p className="text-purple-700 text-sm">One-to-one, one-to-many, many-to-many</p>
+                                </div>
+                                <div className="bg-yellow-50 p-4 rounded-lg">
+                                    <h4 className="font-semibold text-yellow-800 mb-2">Performance</h4>
+                                    <p className="text-yellow-700 text-sm">Query optimization and scaling strategies</p>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                );
 
-        <section>
-          <h3 className="text-xl font-semibold text-gray-800 mb-3">Database Design Patterns</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-blue-800 mb-2">Relational Patterns</h4>
-              <ul className="text-blue-700 text-sm space-y-1">
-                <li>Foreign Keys for relationships</li>
-                <li>Junction tables for many-to-many</li>
-                <li>Composite keys</li>
-                <li>Cascading operations</li>
-              </ul>
-            </div>
-            <div className="bg-green-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-green-800 mb-2">NoSQL Patterns</h4>
-              <ul className="text-green-700 text-sm space-y-1">
-                <li>Embedding vs Referencing</li>
-                <li>Denormalization for performance</li>
-                <li>Bucket pattern for time-series</li>
-                <li>Schema versioning</li>
-              </ul>
-            </div>
-          </div>
-        </section>
+            case 'examples':
+                return (
+                    <div className="space-y-6">
+                        <section>
+                            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Database Code Examples</h2>
+                            <div className="space-y-4">
+                                <div className="bg-gray-50 p-4 rounded-lg">
+                                    <h4 className="font-semibold mb-2">Node.js with MongoDB</h4>
+                                    <pre className="text-sm text-gray-700 overflow-x-auto">
+{`const { MongoClient } = require('mongodb');
 
-        <section>
-          <h3 className="text-xl font-semibold text-gray-800 mb-3">Performance Optimization</h3>
-          <div className="space-y-4">
-            <div className="border-l-4 border-blue-500 pl-4">
-              <h4 className="font-semibold text-gray-800">Indexing Strategy</h4>
-              <p className="text-gray-600 text-sm">Create indexes on frequently queried columns, avoid over-indexing</p>
-            </div>
-            <div className="border-l-4 border-green-500 pl-4">
-              <h4 className="font-semibold text-gray-800">Query Optimization</h4>
-              <p className="text-gray-600 text-sm">Use EXPLAIN plans, avoid N+1 queries, optimize JOINs</p>
-            </div>
-            <div className="border-l-4 border-yellow-500 pl-4">
-              <h4 className="font-semibold text-gray-800">Caching</h4>
-              <p className="text-gray-600 text-sm">Redis, Memcached for frequently accessed data</p>
-            </div>
-            <div className="border-l-4 border-purple-500 pl-4">
-              <h4 className="font-semibold text-gray-800">Connection Pooling</h4>
-              <p className="text-gray-600 text-sm">Reuse database connections to reduce overhead</p>
-            </div>
-          </div>
-        </section>
+async function connectToMongoDB() {
+    const client = new MongoClient('mongodb://localhost:27017');
+    await client.connect();
+    
+    const db = client.db('myapp');
+    const users = db.collection('users');
+    
+    // Insert user
+    await users.insertOne({
+        name: 'John Doe',
+        email: 'john@example.com',
+        createdAt: new Date()
+    });
+    
+    // Find users
+    const allUsers = await users.find({}).toArray();
+    console.log(allUsers);
+    
+    await client.close();
+}`}
+                                    </pre>
+                                </div>
 
-        <section>
-          <h3 className="text-xl font-semibold text-gray-800 mb-3">Interview Questions</h3>
-          <div className="space-y-2">
-            <details className="bg-gray-50 p-3 rounded">
-              <summary className="font-semibold cursor-pointer">What are ACID properties?</summary>
-              <p className="mt-2 text-gray-600 text-sm">Atomicity (all or nothing), Consistency (valid state), Isolation (concurrent transactions), Durability (persistent storage).</p>
-            </details>
-            <details className="bg-gray-50 p-3 rounded">
-              <summary className="font-semibold cursor-pointer">Explain different types of JOINs</summary>
-              <p className="mt-2 text-gray-600 text-sm">INNER JOIN (matching records), LEFT JOIN (all left + matching right), RIGHT JOIN (all right + matching left), FULL OUTER JOIN (all records).</p>
-            </details>
-            <details className="bg-gray-50 p-3 rounded">
-              <summary className="font-semibold cursor-pointer">What is database normalization?</summary>
-              <p className="mt-2 text-gray-600 text-sm">Process of organizing data to reduce redundancy. 1NF (atomic values), 2NF (no partial dependencies), 3NF (no transitive dependencies).</p>
-            </details>
-            <details className="bg-gray-50 p-3 rounded">
-              <summary className="font-semibold cursor-pointer">When to use SQL vs NoSQL?</summary>
-              <p className="mt-2 text-gray-600 text-sm">Use SQL for complex relationships, ACID requirements. Use NoSQL for flexible schema, horizontal scaling, large volumes of unstructured data.</p>
-            </details>
-          </div>
-        </section>
+                                <div className="bg-gray-50 p-4 rounded-lg">
+                                    <h4 className="font-semibold mb-2">Node.js with MySQL</h4>
+                                    <pre className="text-sm text-gray-700 overflow-x-auto">
+{`const mysql = require('mysql2/promise');
 
-        <section>
-          <h3 className="text-xl font-semibold text-gray-800 mb-3">Popular Databases</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-blue-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-blue-800 mb-2">SQL Databases</h4>
-              <ul className="text-blue-700 text-sm space-y-1">
-                <li>PostgreSQL - Advanced SQL features</li>
-                <li>MySQL - Popular web database</li>
-                <li>SQLite - Embedded database</li>
-                <li>SQL Server - Enterprise Microsoft</li>
-              </ul>
-            </div>
-            <div className="bg-green-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-green-800 mb-2">NoSQL Databases</h4>
-              <ul className="text-green-700 text-sm space-y-1">
-                <li>MongoDB - Document database</li>
-                <li>Redis - In-memory key-value</li>
-                <li>Cassandra - Wide-column store</li>
-                <li>DynamoDB - AWS managed NoSQL</li>
-              </ul>
-            </div>
-          </div>
-        </section>
+async function connectToMySQL() {
+    const connection = await mysql.createConnection({
+        host: 'localhost',
+        user: 'root',
+        password: 'password',
+        database: 'myapp'
+    });
+    
+    // Insert user
+    await connection.execute(
+        'INSERT INTO users (name, email) VALUES (?, ?)',
+        ['John Doe', 'john@example.com']
+    );
+    
+    // Select users
+    const [rows] = await connection.execute(
+        'SELECT * FROM users WHERE age > ?',
+        [18]
+    );
+    
+    console.log(rows);
+    await connection.end();
+}`}
+                                    </pre>
+                                </div>
+                            </div>
+                        </section>
+                    </div>
+                );
 
-        <section>
-          <h3 className="text-xl font-semibold text-gray-800 mb-3">Best Practices</h3>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-green-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-green-800 mb-2">✅ Do</h4>
-              <ul className="text-green-700 text-sm space-y-1">
-                <li>Use parameterized queries</li>
-                <li>Regular backups and recovery tests</li>
-                <li>Monitor query performance</li>
-                <li>Implement proper security</li>
-                <li>Use transactions appropriately</li>
-              </ul>
+            case 'interview':
+                return (
+                    <div className="space-y-6">
+                        <section>
+                            <h2 className="text-2xl font-semibold text-gray-800 mb-4">Database Interview Questions</h2>
+                            <div className="space-y-4">
+                                <details className="bg-blue-50 p-4 rounded-lg">
+                                    <summary className="font-semibold text-blue-800 cursor-pointer mb-2">
+                                        What is the difference between SQL and NoSQL databases?
+                                    </summary>
+                                    <div className="text-blue-700 text-sm space-y-2">
+                                        <p><strong>SQL Databases:</strong></p>
+                                        <ul className="list-disc ml-4 space-y-1">
+                                            <li>Structured data in tables</li>
+                                            <li>ACID compliance</li>
+                                            <li>Fixed schema</li>
+                                            <li>Complex queries with JOINs</li>
+                                        </ul>
+                                        <p><strong>NoSQL Databases:</strong></p>
+                                        <ul className="list-disc ml-4 space-y-1">
+                                            <li>Flexible data models</li>
+                                            <li>Eventually consistent</li>
+                                            <li>Dynamic schema</li>
+                                            <li>Horizontal scaling</li>
+                                        </ul>
+                                    </div>
+                                </details>
+
+                                <details className="bg-green-50 p-4 rounded-lg">
+                                    <summary className="font-semibold text-green-800 cursor-pointer mb-2">
+                                        Explain database normalization
+                                    </summary>
+                                    <div className="text-green-700 text-sm space-y-2">
+                                        <p><strong>Answer:</strong> Normalization is the process of organizing data to reduce redundancy and improve data integrity.</p>
+                                        <p><strong>Normal Forms:</strong></p>
+                                        <ul className="list-disc ml-4 space-y-1">
+                                            <li><strong>1NF:</strong> Atomic values, no repeating groups</li>
+                                            <li><strong>2NF:</strong> 1NF + no partial dependencies</li>
+                                            <li><strong>3NF:</strong> 2NF + no transitive dependencies</li>
+                                        </ul>
+                                    </div>
+                                </details>
+                            </div>
+                        </section>
+                    </div>
+                );
+
+            default:
+                return <div>Select a tab to view content</div>;
+        }
+    };
+
+    return (
+        <div className="min-h-screen bg-gray-50">
+            <div className="max-w-6xl mx-auto px-4 py-8">
+                <div className="mb-8">
+                    <h1 className="text-4xl font-bold text-gray-900 mb-2">Database Study Guide</h1>
+                    <p className="text-xl text-gray-600">Master SQL, NoSQL, and database design principles</p>
+                </div>
+
+                {/* Tab Navigation */}
+                <div className="mb-8">
+                    <div className="border-b border-gray-200">
+                        <nav className="flex space-x-8 overflow-x-auto">
+                            {tabs.map((tab) => (
+                                <button
+                                    key={tab.id}
+                                    onClick={() => setActiveTab(tab.id)}
+                                    className={`whitespace-nowrap pb-4 px-1 border-b-2 font-medium text-sm transition-colors ${
+                                        activeTab === tab.id
+                                            ? 'border-blue-500 text-blue-600'
+                                            : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+                                    }`}
+                                >
+                                    <span className="mr-2">{tab.icon}</span>
+                                    {tab.name}
+                                </button>
+                            ))}
+                        </nav>
+                    </div>
+                </div>
+
+                {/* Tab Content */}
+                <div className="bg-white rounded-lg shadow-lg p-6">
+                    {renderTabContent()}
+                </div>
             </div>
-            <div className="bg-red-50 p-4 rounded-lg">
-              <h4 className="font-semibold text-red-800 mb-2">❌ Avoid</h4>
-              <ul className="text-red-700 text-sm space-y-1">
-                <li>SQL injection vulnerabilities</li>
-                <li>Storing passwords in plain text</li>
-                <li>Over-normalization or under-normalization</li>
-                <li>Not using indexes strategically</li>
-                <li>Ignoring database constraints</li>
-              </ul>
-            </div>
-          </div>
-        </section>
-      </div>
-    </div>
-  );
+            
+            <StudyNavigation />
+        </div>
+    );
 };
 
 export default Database;
