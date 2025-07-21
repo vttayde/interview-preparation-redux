@@ -5,6 +5,7 @@ const InterviewQuestions = () => {
     const [activeTab, setActiveTab] = useState('basics');
 
     const tabs = [
+        { id: 'All', name: 'My All Questions', icon: '🌐' },
         { id: 'basics', name: 'Web Development', icon: '🌐' },
         { id: 'frontend', name: 'Frontend', icon: '🎨' },
         { id: 'backend', name: 'Backend', icon: '🔧' },
@@ -15,6 +16,341 @@ const InterviewQuestions = () => {
 
     const renderTabContent = () => {
         switch (activeTab) {
+            case 'All': 
+            return (
+                <div className="space-y-6">
+                    <section>
+                        <h2 className="text-2xl font-semibold text-gray-800 mb-4">My All Questions - JavaScript Code Examples</h2>
+                        <p className="text-gray-600 mb-4">
+                            Personal collection of JavaScript code examples covering arrays, promises, async/await, debouncing, and API retry patterns.
+                            These are practical examples for interview preparation and real-world development scenarios.
+                        </p>
+                    </section>
+
+                    <section>
+                        <h3 className="text-xl font-semibold text-gray-800 mb-3">Code Examples Collection</h3>
+                        <div className="space-y-6">
+                            <div className="bg-blue-50 p-6 rounded-lg">
+                                <h4 className="font-semibold text-blue-800 mb-3 text-lg">📊 Array Reduce - User Age Grouping</h4>
+                                <p className="text-blue-700 text-sm mb-3">
+                                    Group users by age and count occurrences using Array.reduce method.
+                                </p>
+                                <div className="bg-blue-100 p-3 rounded text-xs">
+                                    <strong>Code Example:</strong>
+                                    <pre className="mt-2 text-blue-800 overflow-x-auto">
+                                        {`const user = [
+  { firstName: "vinod", lastName: "tayde", age: 30 },
+  { firstName: "rupali", lastName: "tayde", age: 25 },
+  { firstName: "deepika", lastName: "padukone", age: 30 },
+  { firstName: "akshya", lastName: "kumar", age: 52 },
+];
+
+const output = user.reduce(function (acc, curr) {
+  // Count users by age
+  acc[curr.age] = (acc[curr.age] || 0) + 1;
+  return acc;
+}, {});
+
+console.log(output); // { 30: 2, 25: 1, 52: 1 }`}
+                                    </pre>
+                                </div>
+                            </div>
+
+                            <div className="bg-green-50 p-6 rounded-lg">
+                                <h4 className="font-semibold text-green-800 mb-3 text-lg">🛒 Promise Chaining - E-commerce Flow</h4>
+                                <p className="text-green-700 text-sm mb-3">
+                                    Complete e-commerce flow with promise chaining for order creation and payment processing.
+                                </p>
+                                <div className="bg-green-100 p-3 rounded text-xs">
+                                    <strong>Code Example:</strong>
+                                    <pre className="mt-2 text-green-800 overflow-x-auto">
+                                        {`const cart = ["shoes", "shirt", "phone"];
+
+createOrder(cart)
+  .then((orderId) => {
+    console.log(orderId);
+    return orderId;
+  })
+  .then((orderId) => {
+    return proceedToPayment(orderId);
+  })
+  .then((paymentInfo) => console.log(paymentInfo))
+  .catch((error) => console.log(error.message))
+  .then(() =>
+    console.log("no matter what happens, I will call after catch")
+  );
+
+function createOrder(cart) {
+  const pr = new Promise((resolve, reject) => {
+    if (!validateCart(cart)) {
+      const err = new Error("cart is not valid");
+      reject(err);
+    }
+    const orderId = "123445";
+    if (orderId) {
+      setTimeout(() => resolve(orderId), 5000);
+    }
+  });
+  return pr;
+}
+
+function validateCart(cart) {
+  return true;
+}
+
+function proceedToPayment(orderId) {
+  return new Promise((resolve, reject) => {
+    validatePaymentStatus(orderId)
+      ? resolve("Payment Successful")
+      : reject(new Error("Payment fail"));
+  });
+}
+
+function validatePaymentStatus(orderId) {
+  return false;
+}`}
+                                    </pre>
+                                </div>
+                            </div>
+
+                            <div className="bg-purple-50 p-6 rounded-lg">
+                                <h4 className="font-semibold text-purple-800 mb-3 text-lg">⚡ Promise APIs - Handling Multiple Promises</h4>
+                                <p className="text-purple-700 text-sm mb-3">
+                                    Demonstrating different Promise API methods: all, allSettled, race, and any.
+                                </p>
+                                <div className="bg-purple-100 p-3 rounded text-xs">
+                                    <strong>Code Example:</strong>
+                                    <pre className="mt-2 text-purple-800 overflow-x-auto">
+                                        {`const p1 = new Promise((resolve, reject) => {
+  setTimeout(() => resolve("P1 Successful"), 3000);
+});
+const p2 = new Promise((resolve, reject) => {
+  setTimeout(() => reject("P2 fail"), 1000);
+});
+const p3 = new Promise((resolve, reject) => {
+  setTimeout(() => resolve("P3 Successful"), 2000);
+});
+
+// Promise.all() - Fails if any promise fails
+Promise.all([p1, p2, p3])
+  .then((res) => {
+    console.log("res", res);
+  })
+  .catch((err) => console.error(err));
+
+// Promise.allSettled() - Waits for all to settle
+Promise.allSettled([p1, p2, p3])
+  .then((res) => console.log("res allSettled", res))
+  .catch((err) => console.error(err));
+
+// Promise.race() - First to settle wins
+Promise.race([p1, p2, p3])
+  .then((res) => console.log("res race", res))
+  .catch((err) => console.error(err));
+
+// Promise.any() - First successful promise
+Promise.any([p1, p2, p3])
+  .then((res) => console.log("res any", res))
+  .catch((err) => {
+    console.error(err);
+    console.log(err.errors);
+  });`}
+                                    </pre>
+                                </div>
+                            </div>
+
+                            <div className="bg-orange-50 p-6 rounded-lg">
+                                <h4 className="font-semibold text-orange-800 mb-3 text-lg">🎯 Async/Await with API Calls</h4>
+                                <p className="text-orange-700 text-sm mb-3">
+                                    Modern async/await pattern for handling promises and API calls with error handling.
+                                </p>
+                                <div className="bg-orange-100 p-3 rounded text-xs">
+                                    <strong>Code Example:</strong>
+                                    <pre className="mt-2 text-orange-800 overflow-x-auto">
+                                        {`// Async function always returns a promise
+const p = new Promise((resolve, reject) => {
+  resolve("promise resolved value");
+});
+
+async function getData() {
+  return p;
+}
+
+const dataPromise = getData();
+dataPromise.then((res) => console.log(res));
+
+// Async/Await with API calls
+const p2 = new Promise((resolve, reject) => {
+  setTimeout(() => resolve("promise resolved value"), 10000);
+});
+
+async function handlePromise() {
+  console.log("hello world");
+  const y = await p2;
+  console.log("namaste vinod");
+  console.log(y);
+  return y;
+}
+
+console.log(handlePromise());
+
+// API call with error handling
+const API_URL = "https://api.github.com/users/vttayde";
+
+async function handleAPIPromise() {
+  try {
+    const data = await fetch(API_URL);
+    const jsonValue = await data.json();
+    console.log("response", jsonValue);
+  } catch (err) {
+    console.log(err.message);
+  }
+}
+
+handleAPIPromise();`}
+                                    </pre>
+                                </div>
+                            </div>
+
+                            <div className="bg-yellow-50 p-6 rounded-lg">
+                                <h4 className="font-semibold text-yellow-800 mb-3 text-lg">⏱️ Debouncing Implementation</h4>
+                                <p className="text-yellow-700 text-sm mb-3">
+                                    Debouncing technique to optimize performance by limiting function execution frequency.
+                                </p>
+                                <div className="bg-yellow-100 p-3 rounded text-xs">
+                                    <strong>Code Example:</strong>
+                                    <pre className="mt-2 text-yellow-800 overflow-x-auto">
+                                        {`let counter = 1;
+const apiCall = () => {
+  console.log("fetching data...", counter++);
+};
+
+// Method 1: Basic debouncing
+const optimizeFunction = function (fn, delay) {
+  let timer;
+  return function () {
+    let context = this;
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn();
+    }, delay);
+  };
+};
+
+// Method 2: Advanced debouncing with arguments
+const debouncing = (fn, delay) => {
+  let timer;
+  return function () {
+    let context = this,
+        args = arguments;
+    clearTimeout(timer);
+    timer = setTimeout(() => {
+      fn.apply(context, args);
+    }, delay);
+  };
+};
+
+const handleKey = debouncing(apiCall, 300);
+
+// Usage: handleKey() will only execute after 300ms of inactivity`}
+                                    </pre>
+                                </div>
+                            </div>
+
+                            <div className="bg-red-50 p-6 rounded-lg">
+                                <h4 className="font-semibold text-red-800 mb-3 text-lg">🔄 API Retry Pattern</h4>
+                                <p className="text-red-700 text-sm mb-3">
+                                    Robust API retry mechanism for handling network failures with exponential backoff.
+                                </p>
+                                <div className="bg-red-100 p-3 rounded text-xs">
+                                    <strong>Code Example:</strong>
+                                    <pre className="mt-2 text-red-800 overflow-x-auto">
+                                        {`// Method 1: Async/Await retry pattern
+function value() {
+  return new Promise((resolve, reject) => {
+    var num = Math.floor(Math.random() * 100);
+    if (num < 9) {
+      resolve(\`the resolve num \${num}\`);
+    } else {
+      reject(\`the reject \${num}\`);
+    }
+  });
+}
+
+function delay(retry) {
+  return new Promise((resolve, reject) => setTimeout(resolve, retry));
+}
+
+async function apiCall(callback, retry = 6, time = 5000) {
+  for (let i = 0; i <= retry; i++) {
+    try {
+      const response = await callback();
+      console.log(\`Attempt Number \${i}\`);
+      console.log(\`Success Result:\`, response);
+      return response;
+    } catch (error) {
+      console.log(\`Reject Result:\`, error);
+
+      if (retry === i) {
+        console.log('Failed after maximum retries.');
+        return \`Final Result after \${retry} is \${error}\`;
+      }
+
+      console.log(\`Waiting for \${retry / 1000} seconds before retry...\`);
+      await delay(time);
+    }
+  }
+}
+
+apiCall(value).then((x) => console.log('Final output', x));
+
+// Method 2: Promise-based retry with timer
+let cb = function(result) {
+  console.log("result", result);
+};
+let delay2 = 1000;
+let retries = 9;
+let timer;
+
+function apiCall2() {
+  return new Promise((resolve, reject) => {
+    const apiStatus = 500;
+    if (apiStatus == 200) {
+      return resolve({
+        message: "success",
+        user: {},
+        status: apiStatus
+      });
+    }
+
+    return reject({
+      message: "failed",
+      status: apiStatus
+    });
+  });
+}
+
+function retry(cb, retries, delay) {
+  apiCall2().then((res) => {
+    cb(res);
+  }).catch(() => {
+    clearTimeout(timer);
+    if (retries === 0) return "Failed";
+    console.log(retries);
+    timer = setTimeout(() => {
+      retry(cb, retries - 1, delay);
+    }, delay);
+  });
+}
+
+retry(cb, retries, delay2);`}
+                                    </pre>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            );
             case 'basics':
                 return (
                     <div className="space-y-6">
