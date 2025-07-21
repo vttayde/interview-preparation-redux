@@ -72,10 +72,10 @@ const CodeDisplay = ({ code, language = 'javascript', onTryCode }) => {
                 </div>
             </div>
             
-            {/* Code content */}
-            <div className="flex bg-gray-900">
+            {/* Code content with full height and scroll */}
+            <div className="flex bg-gray-900 max-h-96 overflow-hidden">
                 {/* Line Numbers */}
-                <div className="bg-gray-800 text-gray-400 font-mono text-sm px-3 py-4 select-none min-w-[50px] border-r border-gray-600">
+                <div className="bg-gray-800 text-gray-400 font-mono text-sm px-3 py-4 select-none min-w-[50px] border-r border-gray-600 overflow-y-auto">
                     {code.split('\n').map((_, index) => (
                         <div key={index} className="text-right leading-6 h-6">
                             {index + 1}
@@ -84,7 +84,7 @@ const CodeDisplay = ({ code, language = 'javascript', onTryCode }) => {
                 </div>
                 
                 {/* Code Content with Syntax Highlighting */}
-                <div className="flex-1 p-4 overflow-x-auto bg-gray-900">
+                <div className="flex-1 p-4 overflow-auto bg-gray-900">
                     <pre className="text-sm leading-6 !bg-transparent !m-0 !p-0">
                         <code 
                             className={`language-${language} hljs !bg-transparent !font-mono text-gray-100`}

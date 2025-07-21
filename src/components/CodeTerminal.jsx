@@ -6,11 +6,28 @@ const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "JavaScript T
     const [output, setOutput] = useState([]);
     const [isRunning, setIsRunning] = useState(false);
     const editorRef = useRef(null);
+    const modalRef = useRef(null);
 
     // Update code when initialCode changes
     useEffect(() => {
         setCode(initialCode);
     }, [initialCode]);
+
+    // Click outside to close modal
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (modalRef.current && !modalRef.current.contains(event.target)) {
+                onClose();
+            }
+        };
+
+        if (isOpen) {
+            document.addEventListener('mousedown', handleClickOutside);
+            return () => {
+                document.removeEventListener('mousedown', handleClickOutside);
+            };
+        }
+    }, [isOpen, onClose]);
 
     // Simple code execution
     const runCode = useCallback(async () => {
@@ -121,7 +138,10 @@ const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "JavaScript T
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-            <div className="bg-gray-900 rounded-lg shadow-2xl w-full max-w-6xl h-5/6 flex flex-col">
+            <div 
+                ref={modalRef}
+                className="bg-gray-900 rounded-lg shadow-2xl w-full max-w-6xl h-5/6 flex flex-col"
+            >
                 {/* Header */}
                 <div className="flex items-center justify-between bg-gray-800 px-6 py-3 rounded-t-lg border-b border-gray-700">
                     <div className="flex items-center space-x-3">
