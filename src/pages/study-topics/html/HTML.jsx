@@ -30,7 +30,7 @@ const HTML = () => {
                         {example.code && (
                             <CodeDisplay
                                 code={example.code}
-                                language="javascript"
+                                language="html"
                                 onTryCode={() => handleTryCode(example.code)}
                             />
                         )}
@@ -78,7 +78,8 @@ const HTML = () => {
                 isOpen={terminalOpen}
                 onClose={() => setTerminalOpen(false)}
                 initialCode={terminalCode}
-                title="JavaScript Code Terminal"
+                title="HTML Code Terminal"
+                language="html"
             />
         </div>
     );

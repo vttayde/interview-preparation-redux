@@ -1,13 +1,32 @@
 import React, { useState } from 'react';
 import hljs from 'highlight.js/lib/core';
 import javascript from 'highlight.js/lib/languages/javascript';
+import css from 'highlight.js/lib/languages/css';
+import xml from 'highlight.js/lib/languages/xml'; // For HTML
 import 'highlight.js/styles/atom-one-dark.css'; // Better dark theme
 
-// Register JavaScript language
+// Register languages
 hljs.registerLanguage('javascript', javascript);
+hljs.registerLanguage('css', css);
+hljs.registerLanguage('html', xml);
+hljs.registerLanguage('xml', xml);
 
 const CodeDisplay = ({ code, language = 'javascript', onTryCode }) => {
     const [copied, setCopied] = useState(false);
+
+    // Get appropriate filename based on language
+    const getFileName = (lang) => {
+        switch (lang) {
+            case 'css':
+                return 'styles.css';
+            case 'html':
+            case 'xml':
+                return 'index.html';
+            case 'javascript':
+            default:
+                return 'main.js';
+        }
+    };
 
     // Highlight the code
     const highlightedCode = hljs.highlight(code, { language }).value;
@@ -38,7 +57,7 @@ const CodeDisplay = ({ code, language = 'javascript', onTryCode }) => {
                         <div className="w-3 h-3 bg-yellow-500 rounded-full shadow-sm"></div>
                         <div className="w-3 h-3 bg-green-500 rounded-full shadow-sm"></div>
                     </div>
-                    <span className="text-gray-200 text-sm font-mono">main.js</span>
+                    <span className="text-gray-200 text-sm font-mono">{getFileName(language)}</span>
                 </div>
                 
                 {/* Built-in action buttons */}

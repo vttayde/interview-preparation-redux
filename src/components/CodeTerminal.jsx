@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import Editor from '@monaco-editor/react';
 
-const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "JavaScript Terminal" }) => {
+const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "Code Terminal", language = "javascript" }) => {
     const [code, setCode] = useState(initialCode);
     const [output, setOutput] = useState([]);
     const [isRunning, setIsRunning] = useState(false);
@@ -251,7 +251,7 @@ const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "JavaScript T
                     <div className="flex-1 border-r border-gray-700">
                         <Editor
                             height="100%"
-                            language="javascript"
+                            language={language}
                             theme="vs-dark"
                             value={code}
                             onChange={setCode}
