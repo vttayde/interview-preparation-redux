@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import parse from 'html-react-parser';
 import TopicsNavigation from '../../../components/layout/TopicsNavigation';
 import CodeDisplay from '../../../components/CodeDisplay';
 import CodeTerminal from '../../../components/CodeTerminal';
@@ -24,7 +25,7 @@ const InterviewQuestions = () => {
                     <div key={example.id} className={`bg-${example.color}-50 p-6 rounded-lg`}>
                         <h4 className={`font-semibold text-${example.color}-800 mb-3 text-lg`}>{example.title}</h4>
                         <div className={`text-${example.color}-700 text-sm mb-3`}>
-                            {example.description}
+                            {parse(example.description)}
                         </div>
                         {example.code && (
                             <CodeDisplay
