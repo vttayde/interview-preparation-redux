@@ -79,6 +79,7 @@ const InterviewQuestions = () => {
                 onClose={() => setTerminalOpen(false)}
                 initialCode={terminalCode}
                 title="JavaScript Code Terminal"
+                language='javascript'
             />
         </div>
     );
