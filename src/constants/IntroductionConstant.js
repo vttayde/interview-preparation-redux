@@ -7,8 +7,30 @@ export const INTRODUCTION_UI_TEXT = {
   description: "Start your interview preparation journey",
 };
 
-
 export const INTRODUCTION_CONTENT = {
+  All: [
+    {
+      id: 8869,
+      title: "📊 Question will be display here",
+      description: "Your answers and descriptions will be displayed here.",
+      color: "blue",
+    },
+    {
+      id: "test12",
+      title: "🛒 Promise Chaining - E-commerce Flow",
+      description: "Your answers and descriptions will be displayed here.",
+      color: "green",
+    },
+  ],
+  basics: [
+    {
+      id: "test2",
+      title: "📊 Your Questions",
+      description: "Your answers and descriptions will be displayed here.",
+      color: "blue",
+      code: `Your code here`,
+    },
+  ],
   default: [
     {
       id: "default",
@@ -30,7 +52,7 @@ export const INTRODUCTION_CONTENT = {
         <li>Node.js backend development</li>
         <li>Database design and querying</li>
         <li>Project-based learning</li>
-      </ul>` ,
+      </ul>`,
     },
     {
       id: "97",

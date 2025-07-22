@@ -5,9 +5,11 @@ import CodeDisplay from '../../../components/CodeDisplay';
 import CodeTerminal from '../../../components/CodeTerminal';
 import { INTRODUCTION_UI_TEXT, INTRODUCTION_CONTENT } from '../../../constants/IntroductionConstant';
 
-const tabs = [];
+const tabs = [{ id: "default", name: "default tab", icon: "🌐" },
+{ id: "All", name: "test tab1", icon: "❓" },
+{ id: "basics", name: "test tab2", icon: "🌐" }];
 const Introduction = () => {
-  const [activeTab, setActiveTab] = useState('All');
+  const [activeTab, setActiveTab] = useState('default');
   const [terminalOpen, setTerminalOpen] = useState(false);
   const [terminalCode, setTerminalCode] = useState('');
 
