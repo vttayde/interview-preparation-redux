@@ -1,7 +1,7 @@
-import React, { useState, useRef, useEffect, useCallback } from 'react';
+import React, { useState, useRef, useEffect, useCallback, useMemo } from 'react';
 import Editor from '@monaco-editor/react';
 
-const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "Code Terminal", language = "javascript" }) => {
+const CodeTerminal = ({ isOpen, onClose, initialCode = '', language = "javascript" }) => {
     const [code, setCode] = useState(initialCode);
     const [selectedLanguage, setSelectedLanguage] = useState(language);
     const [output, setOutput] = useState([]);
@@ -9,8 +9,8 @@ const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "Code Termina
     const editorRef = useRef(null);
     const modalRef = useRef(null);
 
-    // Available languages for dropdown - All Popular Languages
-    const languages = [
+    // Memoized languages array
+    const languages = useMemo(() => [
         { value: 'javascript', label: 'JavaScript', filename: 'main.js' },
         { value: 'typescript', label: 'TypeScript', filename: 'main.ts' },
         { value: 'python', label: 'Python', filename: 'main.py' },
@@ -29,12 +29,55 @@ const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "Code Termina
         { value: 'json', label: 'JSON', filename: 'data.json' },
         { value: 'yaml', label: 'YAML', filename: 'config.yml' },
         { value: 'bash', label: 'Bash', filename: 'script.sh' }
-    ];
+    ], []);
 
-    // Get current language info
-    const getCurrentLanguage = () => {
-        return languages.find(lang => lang.value === selectedLanguage) || languages[0];
-    };
+    // Memoized current language
+    const currentLanguage = useMemo(() => 
+        languages.find(lang => lang.value === selectedLanguage) || languages[0], 
+        [languages, selectedLanguage]
+    );
+
+    // Memoized editor options
+    const editorOptions = useMemo(() => ({
+        minimap: { enabled: false },
+        scrollBeyondLastLine: false,
+        fontSize: 14,
+        lineNumbers: 'on',
+        roundedSelection: false,
+        automaticLayout: true,
+        formatOnPaste: true,
+        formatOnType: true,
+        wordWrap: 'on',
+        tabSize: 2,
+        insertSpaces: true,
+    }), []);
+
+    // Optimized format argument function
+    const formatArg = useCallback((arg) => {
+        if (typeof arg === 'object' && arg !== null) {
+            try {
+                return JSON.stringify(arg, null, 2);
+            } catch {
+                return String(arg);
+            }
+        }
+        if (typeof arg === 'undefined') return 'undefined';
+        if (typeof arg === 'function') return arg.toString();
+        return String(arg);
+    }, []);
+
+    // Optimized output style function
+    const getOutputStyle = useCallback((type) => {
+        const styles = {
+            error: 'text-red-400 font-medium',
+            success: 'text-green-400',
+            info: 'text-blue-400',
+            result: 'text-cyan-400 font-medium',
+            log: 'text-gray-300',
+            warn: 'text-yellow-400'
+        };
+        return styles[type] || 'text-gray-300';
+    }, []);
 
     // Update code when initialCode changes
     useEffect(() => {
@@ -57,7 +100,7 @@ const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "Code Termina
         }
     }, [isOpen, onClose]);
 
-    // Simple code execution
+    // Optimized code execution
     const runCode = useCallback(async () => {
         if (isRunning) return;
         
@@ -72,92 +115,44 @@ const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "Code Termina
                 timestamp: new Date().toLocaleTimeString() 
             }]);
 
-            // Enhanced console capture with proper formatting
+            // Optimized console capture
             const logs = [];
-            const originalLog = console.log;
-            const originalError = console.error;
-            const originalWarn = console.warn;
+            const originalConsole = {
+                log: console.log,
+                error: console.error,
+                warn: console.warn
+            };
             
-            console.log = (...args) => {
-                // Properly format different types of values
-                const formattedArgs = args.map(arg => {
-                    if (typeof arg === 'object' && arg !== null) {
-                        try {
-                            return JSON.stringify(arg, null, 2);
-                        } catch {
-                            return String(arg);
-                        }
-                    } else if (typeof arg === 'undefined') {
-                        return 'undefined';
-                    } else if (typeof arg === 'function') {
-                        return arg.toString();
-                    }
-                    return String(arg);
-                });
-                logs.push({ type: 'log', content: formattedArgs.join(' ') });
-                originalLog.apply(console, args);
+            const createConsoleHandler = (type) => (...args) => {
+                const formattedArgs = args.map(formatArg);
+                logs.push({ type, content: formattedArgs.join(' ') });
+                originalConsole[type].apply(console, args);
             };
 
-            console.error = (...args) => {
-                const formattedArgs = args.map(arg => {
-                    if (typeof arg === 'object' && arg !== null) {
-                        try {
-                            return JSON.stringify(arg, null, 2);
-                        } catch {
-                            return String(arg);
-                        }
-                    }
-                    return String(arg);
-                });
-                logs.push({ type: 'error', content: formattedArgs.join(' ') });
-                originalError.apply(console, args);
-            };
+            console.log = createConsoleHandler('log');
+            console.error = createConsoleHandler('error');
+            console.warn = createConsoleHandler('warn');
 
-            console.warn = (...args) => {
-                const formattedArgs = args.map(arg => {
-                    if (typeof arg === 'object' && arg !== null) {
-                        try {
-                            return JSON.stringify(arg, null, 2);
-                        } catch {
-                            return String(arg);
-                        }
-                    }
-                    return String(arg);
-                });
-                logs.push({ type: 'warn', content: formattedArgs.join(' ') });
-                originalWarn.apply(console, args);
-            };
-
-            // Simple code execution with Function constructor
+            // Execute code
             const func = new Function(code);
             const result = func();
 
             // Restore console methods
-            console.log = originalLog;
-            console.error = originalError;
-            console.warn = originalWarn;
+            Object.assign(console, originalConsole);
 
-            // Show console logs with proper formatting
+            // Add logs to output
             logs.forEach(log => {
                 setOutput(prev => [...prev, { 
-                    type: log.type, 
-                    content: log.content, 
+                    ...log, 
                     timestamp: new Date().toLocaleTimeString() 
                 }]);
             });
 
-            // Show result if any
+            // Add result if any
             if (result !== undefined) {
-                let resultContent;
-                if (typeof result === 'object' && result !== null) {
-                    try {
-                        resultContent = `Return Value:\n${JSON.stringify(result, null, 2)}`;
-                    } catch {
-                        resultContent = `Return Value: ${String(result)}`;
-                    }
-                } else {
-                    resultContent = `Return Value: ${String(result)}`;
-                }
+                const resultContent = typeof result === 'object' && result !== null
+                    ? `Return Value:\n${JSON.stringify(result, null, 2)}`
+                    : `Return Value: ${String(result)}`;
                 
                 setOutput(prev => [...prev, { 
                     type: 'result', 
@@ -182,7 +177,7 @@ const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "Code Termina
         } finally {
             setIsRunning(false);
         }
-    }, [code, isRunning]);
+    }, [code, isRunning, formatArg]);
 
     // Simple keyboard shortcut (after runCode is defined)
     useEffect(() => {
@@ -198,31 +193,33 @@ const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "Code Termina
         return () => document.removeEventListener('keydown', handleKeyDown);
     }, [isOpen, runCode]);
 
-    const clearOutput = () => {
-        setOutput([]);
-    };
+    const handleEditorDidMount = useCallback((editor) => {
+        editorRef.current = editor;
+    }, []);
 
-    const formatCode = () => {
+    // Optimized clear and format functions
+    const clearOutput = useCallback(() => {
+        setOutput([]);
+    }, []);
+
+    const formatCode = useCallback(() => {
         if (editorRef.current) {
             editorRef.current.getAction('editor.action.formatDocument').run();
         }
-    };
+    }, []);
 
-    const handleEditorDidMount = (editor) => {
-        editorRef.current = editor;
-    };
-
-    const getOutputStyle = (type) => {
-        switch (type) {
-            case 'error': return 'text-red-400 font-medium';
-            case 'success': return 'text-green-400';
-            case 'info': return 'text-blue-400';
-            case 'result': return 'text-cyan-400 font-medium';
-            case 'log': return 'text-gray-300';
-            case 'warn': return 'text-yellow-400';
-            default: return 'text-gray-300';
-        }
-    };
+    // Memoized output item component for better performance
+    const OutputItem = useCallback(({ item, index }) => (
+        <div key={index} className="py-2 border-b border-gray-700 last:border-b-0">
+            <div className="text-xs text-gray-400 mb-1 flex justify-between">
+                <span>{item.timestamp}</span>
+                <span className="capitalize">{item.type}</span>
+            </div>
+            <div className={`${getOutputStyle(item.type)} whitespace-pre-wrap break-words`}>
+                {item.content}
+            </div>
+        </div>
+    ), [getOutputStyle]);
 
     if (!isOpen) return null;
 
@@ -240,7 +237,7 @@ const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "Code Termina
                             <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
                             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                         </div>
-                        <h3 className="text-white font-medium">{getCurrentLanguage().filename}</h3>
+                        <h3 className="text-white font-medium">{currentLanguage.filename}</h3>
                     </div>
                     
                     {/* Action Buttons with Language Dropdown */}
@@ -297,19 +294,7 @@ const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "Code Termina
                             value={code}
                             onChange={setCode}
                             onMount={handleEditorDidMount}
-                            options={{
-                                minimap: { enabled: false },
-                                scrollBeyondLastLine: false,
-                                fontSize: 14,
-                                lineNumbers: 'on',
-                                roundedSelection: false,
-                                automaticLayout: true,
-                                formatOnPaste: true,
-                                formatOnType: true,
-                                wordWrap: 'on',
-                                tabSize: 2,
-                                insertSpaces: true,
-                            }}
+                            options={editorOptions}
                         />
                     </div>
 
@@ -326,15 +311,7 @@ const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "Code Termina
                                 </div>
                             ) : (
                                 output.map((item, index) => (
-                                    <div key={index} className="py-2 border-b border-gray-700 last:border-b-0">
-                                        <div className="text-xs text-gray-400 mb-1 flex justify-between">
-                                            <span>{item.timestamp}</span>
-                                            <span className="capitalize">{item.type}</span>
-                                        </div>
-                                        <div className={`${getOutputStyle(item.type)} whitespace-pre-wrap break-words`}>
-                                            {item.content}
-                                        </div>
-                                    </div>
+                                    <OutputItem key={index} item={item} index={index} />
                                 ))
                             )}
                         </div>
