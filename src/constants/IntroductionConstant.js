@@ -2,6 +2,12 @@
 // INTRODUCTION PAGE CONSTANTS
 // =============================================================================
 
+export const INTRODUCTION_TABS = [
+    { id: "default", name: "Introduction", icon: "🌐" },
+    { id: "All", name: "Overview", icon: "❓" },
+    { id: "basics", name: "Basics", icon: "📚" }
+];
+
 export const INTRODUCTION_UI_TEXT = {
   title: "Introduction",
   description: "Start your interview preparation journey",

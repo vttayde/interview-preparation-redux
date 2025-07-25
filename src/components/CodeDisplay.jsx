@@ -160,10 +160,10 @@ const CodeDisplay = ({ code, language = 'javascript', onTryCode }) => {
                 </div>
             </div>
             
-            {/* Code content with full height and scroll */}
+            {/* Code content - simple approach like CodeTerminal */}
             <div className="flex bg-gray-900 max-h-96 overflow-hidden">
                 {/* Line Numbers */}
-                <div className="bg-gray-800 text-gray-400 font-mono text-sm px-3 py-4 select-none min-w-[50px] border-r border-gray-600 overflow-y-auto">
+                <div className="bg-gray-800 text-gray-400 font-mono text-sm px-3 py-4 select-none min-w-[50px] border-r border-gray-600">
                     {code.split('\n').map((_, index) => (
                         <div key={index} className="text-right leading-6 h-6">
                             {index + 1}
@@ -171,18 +171,11 @@ const CodeDisplay = ({ code, language = 'javascript', onTryCode }) => {
                     ))}
                 </div>
                 
-                {/* Code Content with Syntax Highlighting */}
-                <div className="flex-1 p-4 overflow-auto bg-gray-900">
-                    <pre className="text-sm leading-6 !bg-transparent !m-0 !p-0">
+                {/* Code Content - clean scrollbar like CodeTerminal */}
+                <div className="flex-1 p-4 overflow-y-auto bg-gray-900 font-mono text-sm">
+                    <pre className="text-sm leading-6">
                         <code 
-                            className={`language-${language} hljs !bg-transparent !font-mono text-gray-100`}
-                            style={{
-                                fontFamily: 'Consolas, Monaco, "Andale Mono", "Ubuntu Mono", monospace',
-                                fontSize: '14px',
-                                lineHeight: '1.5',
-                                background: 'transparent !important',
-                                color: '#e5e7eb !important'
-                            }}
+                            className={`language-${language} hljs`}
                             dangerouslySetInnerHTML={{ __html: highlightedCode }}
                         />
                     </pre>
