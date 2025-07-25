@@ -1,16 +1,14 @@
-import StudyTopicLayout from '../../../components/layout/StudyTopicLayout';
-import { INTRODUCTION_UI_TEXT, INTRODUCTION_CONTENT } from '../../../constants/IntroductionConstant';
-
-const tabs = [
-    { id: "default", name: "Introduction", icon: "🌐" },
-    { id: "All", name: "Overview", icon: "❓" },
-    { id: "basics", name: "Basics", icon: "�" }
-];
+﻿import StudyTopicLayout from '../../../components/layout/StudyTopicLayout';
+import { 
+    INTRODUCTION_TABS,
+    INTRODUCTION_UI_TEXT, 
+    INTRODUCTION_CONTENT 
+} from '../../../constants';
 
 const Introduction = () => {
     return (
         <StudyTopicLayout
-            tabs={tabs}
+            tabs={INTRODUCTION_TABS}
             uiText={INTRODUCTION_UI_TEXT}
             content={INTRODUCTION_CONTENT}
             language="javascript"

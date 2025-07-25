@@ -1,5 +1,5 @@
 import StudyTopicLayout from '../../../components/layout/StudyTopicLayout';
-import { JAVASCRIPT_TABS, JAVASCRIPT_UI_TEXT, JAVASCRIPT_CONTENT } from '../../../constants/JavaScriptTabConstant';
+import { JAVASCRIPT_TABS, JAVASCRIPT_UI_TEXT, JAVASCRIPT_CONTENT } from '../../../constants';
 
 const JavaScript = () => {
     return (

@@ -1,5 +1,5 @@
 import StudyTopicLayout from '../../../components/layout/StudyTopicLayout';
-import { INTERVIEW_QUESTIONS_TABS, INTERVIEW_QUESTIONS_CONTENT, INTERVIEW_QUESTIONS_UI_TEXT } from '../../../constants/interviewQuestionsConstants';
+import { INTERVIEW_QUESTIONS_TABS, INTERVIEW_QUESTIONS_CONTENT, INTERVIEW_QUESTIONS_UI_TEXT } from '../../../constants';
 
 const InterviewQuestions = () => {
     return (

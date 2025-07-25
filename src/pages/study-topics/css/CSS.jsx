@@ -1,5 +1,5 @@
 import StudyTopicLayout from '../../../components/layout/StudyTopicLayout';
-import { CSS_TABS, CSS_UI_TEXT, CSS_CONTENT } from '../../../constants/CssTabConstant';
+import { CSS_TABS, CSS_UI_TEXT, CSS_CONTENT } from '../../../constants';
 
 const CSS = () => {
     return (

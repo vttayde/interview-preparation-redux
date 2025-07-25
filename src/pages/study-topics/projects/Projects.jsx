@@ -1,5 +1,5 @@
 import StudyTopicLayout from '../../../components/layout/StudyTopicLayout';
-import { PROJECTS_TABS, PROJECTS_UI_TEXT, PROJECTS_CONTENT } from '../../../constants/ProjectsTabConstant';
+import { PROJECTS_TABS, PROJECTS_UI_TEXT, PROJECTS_CONTENT } from '../../../constants';
 
 const Projects = () => {
     return (

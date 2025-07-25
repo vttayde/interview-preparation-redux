@@ -1,5 +1,5 @@
 import StudyTopicLayout from '../../../components/layout/StudyTopicLayout';
-import { REACT_TABS, REACT_UI_TEXT, REACT_CONTENT } from '../../../constants/ReactTabConstant';
+import { REACT_TABS, REACT_UI_TEXT, REACT_CONTENT } from '../../../constants';
 
 const ReactJS = () => {
     return (

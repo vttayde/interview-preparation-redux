@@ -1,5 +1,5 @@
 import StudyTopicLayout from '../../../components/layout/StudyTopicLayout';
-import { NODEJS_TABS, NODEJS_UI_TEXT, NODEJS_CONTENT } from '../../../constants/NodeJSTabConstant';
+import { NODEJS_TABS, NODEJS_UI_TEXT, NODEJS_CONTENT } from '../../../constants';
 
 const NodeJS = () => {
     return (

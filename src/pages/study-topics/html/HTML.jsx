@@ -1,5 +1,5 @@
 import StudyTopicLayout from '../../../components/layout/StudyTopicLayout';
-import { HTML_TABS, HTML_UI_TEXT, HTML_CONTENT } from '../../../constants/HtmlTabConstant';
+import { HTML_TABS, HTML_UI_TEXT, HTML_CONTENT } from '../../../constants';
 
 const HTML = () => {
     return (

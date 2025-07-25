@@ -1,5 +1,5 @@
 import StudyTopicLayout from '../../../components/layout/StudyTopicLayout';
-import { DATABASE_TABS, DATABASE_UI_TEXT, DATABASE_CONTENT } from '../../../constants/DatabaseTabConstant';
+import { DATABASE_TABS, DATABASE_UI_TEXT, DATABASE_CONTENT } from '../../../constants';
 
 const Database = () => {
     return (
@@ -7,7 +7,7 @@ const Database = () => {
             tabs={DATABASE_TABS}
             uiText={DATABASE_UI_TEXT}
             content={DATABASE_CONTENT}
-            language="sql"
+            // language="sql"
             terminalTitle="Database Code Terminal"
         />
     );
