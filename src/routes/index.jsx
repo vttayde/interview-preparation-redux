@@ -6,6 +6,7 @@ import Login from '../pages/auth/Login';
 import SignUp from '../pages/auth/SignUp';
 import Dashboard from '../pages/Dashboard';
 import Profile from '../pages/Profile';
+import Favorites from '../pages/Favorites';
 
 // Lazy loaded study topics for better performance
 import {
@@ -53,6 +54,14 @@ export const router = createBrowserRouter([
         element: (
           <ProtectedRoute>
             <Profile />
+          </ProtectedRoute>
+        )
+      },
+      {
+        path: 'favorites',
+        element: (
+          <ProtectedRoute>
+            <Favorites />
           </ProtectedRoute>
         )
       },
