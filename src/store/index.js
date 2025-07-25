@@ -1,27 +1,13 @@
 /**
- * Redux Store Configuration
- * 
- * This is the main Redux store configuration for the application.
- * It combines all reducers from feature slices and configures the Redux store with middleware.
- * 
- * Our project follows Redux Toolkit's recommended feature-based architecture:
- * - Store configuration is centralized here
- * - Feature slices are located in their respective feature folders
- * - This approach organizes code by domain rather than technical type
- * 
- * Redux Toolkit's configureStore provides good defaults:
- * - Redux DevTools extension is automatically set up
- * - thunk middleware is included by default
- * - Immutability check middleware prevents state mutations
- * - Serializability check middleware catches non-serializable values
+ * Redux Store Configuration - Simplified and Optimized
  */
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../features/auth/authSlice';
 import formReducer from '../features/form/formSlice';
+import favoritesReducer from '../features/favorites/favoritesSlice';
 
 /**
  * Custom logger middleware for development
- * A simplified version of redux-logger that doesn't overwhelm the console
  */
 const loggerMiddleware = store => next => action => {
   if (import.meta.env.DEV) {
@@ -35,21 +21,16 @@ const loggerMiddleware = store => next => action => {
   return next(action);
 };
 
-/**
- * Configure and create the Redux store
- */
 export const store = configureStore({
   reducer: {
     auth: authReducer,
-    form: formReducer
+    form: formReducer,
+    favorites: favoritesReducer
   },
-  // Add custom middleware in development, use defaults in production
   middleware: (getDefaultMiddleware) => 
     import.meta.env.DEV 
       ? getDefaultMiddleware().concat(loggerMiddleware)
       : getDefaultMiddleware(),
-  
-  // DevTools configuration
   devTools: !import.meta.env.PROD,
 });
 
