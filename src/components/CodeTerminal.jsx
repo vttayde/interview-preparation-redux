@@ -3,10 +3,38 @@ import Editor from '@monaco-editor/react';
 
 const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "Code Terminal", language = "javascript" }) => {
     const [code, setCode] = useState(initialCode);
+    const [selectedLanguage, setSelectedLanguage] = useState(language);
     const [output, setOutput] = useState([]);
     const [isRunning, setIsRunning] = useState(false);
     const editorRef = useRef(null);
     const modalRef = useRef(null);
+
+    // Available languages for dropdown - All Popular Languages
+    const languages = [
+        { value: 'javascript', label: 'JavaScript', filename: 'main.js' },
+        { value: 'typescript', label: 'TypeScript', filename: 'main.ts' },
+        { value: 'python', label: 'Python', filename: 'main.py' },
+        { value: 'java', label: 'Java', filename: 'Main.java' },
+        { value: 'cpp', label: 'C++', filename: 'main.cpp' },
+        { value: 'csharp', label: 'C#', filename: 'Program.cs' },
+        { value: 'php', label: 'PHP', filename: 'index.php' },
+        { value: 'ruby', label: 'Ruby', filename: 'main.rb' },
+        { value: 'go', label: 'Go', filename: 'main.go' },
+        { value: 'rust', label: 'Rust', filename: 'main.rs' },
+        { value: 'swift', label: 'Swift', filename: 'main.swift' },
+        { value: 'kotlin', label: 'Kotlin', filename: 'Main.kt' },
+        { value: 'html', label: 'HTML', filename: 'index.html' },
+        { value: 'css', label: 'CSS', filename: 'styles.css' },
+        { value: 'sql', label: 'SQL', filename: 'query.sql' },
+        { value: 'json', label: 'JSON', filename: 'data.json' },
+        { value: 'yaml', label: 'YAML', filename: 'config.yml' },
+        { value: 'bash', label: 'Bash', filename: 'script.sh' }
+    ];
+
+    // Get current language info
+    const getCurrentLanguage = () => {
+        return languages.find(lang => lang.value === selectedLanguage) || languages[0];
+    };
 
     // Update code when initialCode changes
     useEffect(() => {
@@ -212,11 +240,24 @@ const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "Code Termina
                             <div className="w-3 h-3 bg-yellow-500 rounded-full"></div>
                             <div className="w-3 h-3 bg-green-500 rounded-full"></div>
                         </div>
-                        <h3 className="text-white font-medium">{title}</h3>
+                        <h3 className="text-white font-medium">{getCurrentLanguage().filename}</h3>
                     </div>
                     
-                    {/* Simple Action Buttons */}
+                    {/* Action Buttons with Language Dropdown */}
                     <div className="flex items-center space-x-2">
+                        {/* Language Dropdown */}
+                        <select
+                            value={selectedLanguage}
+                            onChange={(e) => setSelectedLanguage(e.target.value)}
+                            className="text-gray-300 text-xs bg-gray-700 px-3 py-1 rounded border border-gray-600 focus:outline-none focus:border-blue-500 hover:border-gray-500 transition-colors cursor-pointer"
+                            title="Select Language"
+                        >
+                            {languages.map(lang => (
+                                <option key={lang.value} value={lang.value} className="bg-gray-700 text-gray-300">
+                                    {lang.label}
+                                </option>
+                            ))}
+                        </select>
                         <button
                             onClick={formatCode}
                             className="px-3 py-1 bg-blue-600 hover:bg-blue-700 text-white text-sm rounded"
@@ -251,7 +292,7 @@ const CodeTerminal = ({ isOpen, onClose, initialCode = '', title = "Code Termina
                     <div className="flex-1 border-r border-gray-700">
                         <Editor
                             height="100%"
-                            language={language}
+                            language={selectedLanguage}
                             theme="vs-dark"
                             value={code}
                             onChange={setCode}
