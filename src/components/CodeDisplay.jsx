@@ -1,15 +1,49 @@
 import React, { useState } from 'react';
 import hljs from 'highlight.js/lib/core';
 import javascript from 'highlight.js/lib/languages/javascript';
+import typescript from 'highlight.js/lib/languages/typescript';
+import python from 'highlight.js/lib/languages/python';
+import java from 'highlight.js/lib/languages/java';
+import cpp from 'highlight.js/lib/languages/cpp';
+import csharp from 'highlight.js/lib/languages/csharp';
+import php from 'highlight.js/lib/languages/php';
+import ruby from 'highlight.js/lib/languages/ruby';
+import go from 'highlight.js/lib/languages/go';
+import rust from 'highlight.js/lib/languages/rust';
+import swift from 'highlight.js/lib/languages/swift';
+import kotlin from 'highlight.js/lib/languages/kotlin';
 import css from 'highlight.js/lib/languages/css';
 import xml from 'highlight.js/lib/languages/xml'; // For HTML
+import sql from 'highlight.js/lib/languages/sql';
+import json from 'highlight.js/lib/languages/json';
+import yaml from 'highlight.js/lib/languages/yaml';
+import bash from 'highlight.js/lib/languages/bash';
 import 'highlight.js/styles/atom-one-dark.css'; // Better dark theme
 
-// Register languages
+// Register all popular languages
 hljs.registerLanguage('javascript', javascript);
+hljs.registerLanguage('typescript', typescript);
+hljs.registerLanguage('python', python);
+hljs.registerLanguage('java', java);
+hljs.registerLanguage('cpp', cpp);
+hljs.registerLanguage('c++', cpp);
+hljs.registerLanguage('csharp', csharp);
+hljs.registerLanguage('c#', csharp);
+hljs.registerLanguage('php', php);
+hljs.registerLanguage('ruby', ruby);
+hljs.registerLanguage('go', go);
+hljs.registerLanguage('rust', rust);
+hljs.registerLanguage('swift', swift);
+hljs.registerLanguage('kotlin', kotlin);
 hljs.registerLanguage('css', css);
 hljs.registerLanguage('html', xml);
 hljs.registerLanguage('xml', xml);
+hljs.registerLanguage('sql', sql);
+hljs.registerLanguage('json', json);
+hljs.registerLanguage('yaml', yaml);
+hljs.registerLanguage('yml', yaml);
+hljs.registerLanguage('bash', bash);
+hljs.registerLanguage('shell', bash);
 
 const CodeDisplay = ({ code, language = 'javascript', onTryCode }) => {
     const [copied, setCopied] = useState(false);
@@ -17,12 +51,47 @@ const CodeDisplay = ({ code, language = 'javascript', onTryCode }) => {
     // Get appropriate filename based on language
     const getFileName = (lang) => {
         switch (lang) {
+            case 'javascript':
+                return 'main.js';
+            case 'typescript':
+                return 'main.ts';
+            case 'python':
+                return 'main.py';
+            case 'java':
+                return 'Main.java';
+            case 'cpp':
+            case 'c++':
+                return 'main.cpp';
+            case 'csharp':
+            case 'c#':
+                return 'Program.cs';
+            case 'php':
+                return 'index.php';
+            case 'ruby':
+                return 'main.rb';
+            case 'go':
+                return 'main.go';
+            case 'rust':
+                return 'main.rs';
+            case 'swift':
+                return 'main.swift';
+            case 'kotlin':
+                return 'Main.kt';
             case 'css':
                 return 'styles.css';
             case 'html':
             case 'xml':
                 return 'index.html';
-            case 'javascript':
+            case 'sql':
+                return 'query.sql';
+            case 'json':
+                return 'data.json';
+            case 'yaml':
+            case 'yml':
+                return 'config.yml';
+            case 'bash':
+            case 'shell':
+                return 'script.sh';
             default:
                 return 'main.js';
         }

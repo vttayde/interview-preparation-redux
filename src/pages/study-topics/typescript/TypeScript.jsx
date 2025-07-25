@@ -7,7 +7,7 @@ const TypeScript = () => {
             tabs={TYPESCRIPT_TABS}
             uiText={TYPESCRIPT_UI_TEXT}
             content={TYPESCRIPT_CONTENT}
-            // language="typescript"
+            language="typescript"
             terminalTitle="TypeScript Code Terminal"
         />
     );
