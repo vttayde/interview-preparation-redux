@@ -3,10 +3,10 @@ import parse from 'html-react-parser';
 import TopicsNavigation from '../../../components/layout/TopicsNavigation';
 import CodeDisplay from '../../../components/CodeDisplay';
 import CodeTerminal from '../../../components/CodeTerminal';
-import { HTML_TABS,HTML_UI_TEXT,HTML_CONTENT } from '../../../constants/HtmlTabConstant';
+import { INTERVIEW_QUESTIONS_TABS, INTERVIEW_QUESTIONS_CONTENT, INTERVIEW_QUESTIONS_UI_TEXT } from '../../../constants/interviewQuestionsConstants';
 
-const HTML = () => {
-    const [activeTab, setActiveTab] = useState(HTML_TABS[0]?.id || 'default');
+const InterviewQuestions = () => {
+    const [activeTab, setActiveTab] = useState('All');
     const [terminalOpen, setTerminalOpen] = useState(false);
     const [terminalCode, setTerminalCode] = useState('');
 
@@ -15,10 +15,10 @@ const HTML = () => {
         setTerminalOpen(true);
     };
 
-    const tabs = HTML_TABS;
+    const tabs = INTERVIEW_QUESTIONS_TABS;
 
     const renderTabContent = () => {
-        const content = HTML_CONTENT[activeTab] || HTML_CONTENT.default;
+        const content = INTERVIEW_QUESTIONS_CONTENT[activeTab] || INTERVIEW_QUESTIONS_CONTENT.default;
         return (
             <section className="space-y-6">
                 {content.map((example) => (
@@ -30,7 +30,7 @@ const HTML = () => {
                         {example.code && (
                             <CodeDisplay
                                 code={example.code}
-                                language="html"
+                                language="javascript"
                                 onTryCode={() => handleTryCode(example.code)}
                             />
                         )}
@@ -43,8 +43,8 @@ const HTML = () => {
     return (
         <div className="bg-white shadow rounded-lg p-6">
             <div className="border-b border-gray-200 pb-4 mb-6">
-                <h1 className="text-3xl font-bold text-gray-900">{HTML_UI_TEXT.title}</h1>
-                <p className="mt-2 text-gray-600">{HTML_UI_TEXT.description}</p>
+                <h1 className="text-3xl font-bold text-gray-900">{INTERVIEW_QUESTIONS_UI_TEXT.title}</h1>
+                <p className="mt-2 text-gray-600">{INTERVIEW_QUESTIONS_UI_TEXT.description}</p>
             </div>
 
             {/* Tab Navigation */}
@@ -78,11 +78,11 @@ const HTML = () => {
                 isOpen={terminalOpen}
                 onClose={() => setTerminalOpen(false)}
                 initialCode={terminalCode}
-                title="HTML Code Terminal"
-                language="html"
+                title="JavaScript Code Terminal"
+                language='javascript'
             />
         </div>
     );
 };
 
-export default HTML;
+export default InterviewQuestions;

@@ -1,1 +1,15 @@
 @import 'tailwindcss';
+
+/* Optimized dark mode code highlighting */
+.hljs {
+  background: transparent !important;
+  color: #e2e8f0 !important;
+}
+
+/* Essential syntax highlighting - minimal but effective */
+.hljs-keyword { color: #f472b6; }
+.hljs-string { color: #34d399; }
+.hljs-number { color: #fbbf24; }
+.hljs-function { color: #60a5fa; }
+.hljs-comment { color: #6b7280; }
+.hljs-operator { color: #d1d5db; }
