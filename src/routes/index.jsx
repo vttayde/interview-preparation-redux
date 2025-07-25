@@ -7,17 +7,20 @@ import SignUp from '../pages/auth/SignUp';
 import Dashboard from '../pages/Dashboard';
 import Profile from '../pages/Profile';
 
-// Study Topics
-import Introduction from '../pages/study-topics/introduction/Introduction';
-import HTML from '../pages/study-topics/html/HTML';
-import CSS from '../pages/study-topics/css/CSS';
-import JavaScript from '../pages/study-topics/javascript/JavaScript';
-import ReactJS from '../pages/study-topics/reactjs/ReactJS';
-import TypeScript from '../pages/study-topics/typescript/TypeScript';
-import NodeJS from '../pages/study-topics/nodejs/NodeJS';
-import Database from '../pages/study-topics/database/Database';
-import Projects from '../pages/study-topics/projects/Projects';
-import InterviewQuestions from '../pages/study-topics/interview-questions/InterviewQuestions';
+// Lazy loaded study topics for better performance
+import {
+    LazyIntroduction,
+    LazyHTML,
+    LazyCSS,
+    LazyJavaScript,
+    LazyReactJS,
+    LazyTypeScript,
+    LazyNodeJS,
+    LazyDatabase,
+    LazyProjects,
+    LazyInterviewQuestions,
+    LazyWrapper
+} from '../utils/lazyComponents.jsx';
 
 export const router = createBrowserRouter([
   {
@@ -53,12 +56,14 @@ export const router = createBrowserRouter([
           </ProtectedRoute>
         )
       },
-      // Study Topics Routes
+      // Study Topics Routes - Now with Simple Lazy Loading
       {
         path: 'study/introduction',
         element: (
           <ProtectedRoute>
-            <Introduction />
+            <LazyWrapper>
+              <LazyIntroduction />
+            </LazyWrapper>
           </ProtectedRoute>
         )
       },
@@ -66,7 +71,9 @@ export const router = createBrowserRouter([
         path: 'study/html',
         element: (
           <ProtectedRoute>
-            <HTML />
+            <LazyWrapper>
+              <LazyHTML />
+            </LazyWrapper>
           </ProtectedRoute>
         )
       },
@@ -74,7 +81,9 @@ export const router = createBrowserRouter([
         path: 'study/css',
         element: (
           <ProtectedRoute>
-            <CSS />
+            <LazyWrapper>
+              <LazyCSS />
+            </LazyWrapper>
           </ProtectedRoute>
         )
       },
@@ -82,7 +91,9 @@ export const router = createBrowserRouter([
         path: 'study/javascript',
         element: (
           <ProtectedRoute>
-            <JavaScript />
+            <LazyWrapper>
+              <LazyJavaScript />
+            </LazyWrapper>
           </ProtectedRoute>
         )
       },
@@ -90,7 +101,9 @@ export const router = createBrowserRouter([
         path: 'study/reactjs',
         element: (
           <ProtectedRoute>
-            <ReactJS />
+            <LazyWrapper>
+              <LazyReactJS />
+            </LazyWrapper>
           </ProtectedRoute>
         )
       },
@@ -98,7 +111,9 @@ export const router = createBrowserRouter([
         path: 'study/typescript',
         element: (
           <ProtectedRoute>
-            <TypeScript />
+            <LazyWrapper>
+              <LazyTypeScript />
+            </LazyWrapper>
           </ProtectedRoute>
         )
       },
@@ -106,7 +121,9 @@ export const router = createBrowserRouter([
         path: 'study/nodejs',
         element: (
           <ProtectedRoute>
-            <NodeJS />
+            <LazyWrapper>
+              <LazyNodeJS />
+            </LazyWrapper>
           </ProtectedRoute>
         )
       },
@@ -114,7 +131,9 @@ export const router = createBrowserRouter([
         path: 'study/database',
         element: (
           <ProtectedRoute>
-            <Database />
+            <LazyWrapper>
+              <LazyDatabase />
+            </LazyWrapper>
           </ProtectedRoute>
         )
       },
@@ -122,7 +141,9 @@ export const router = createBrowserRouter([
         path: 'study/projects',
         element: (
           <ProtectedRoute>
-            <Projects />
+            <LazyWrapper>
+              <LazyProjects />
+            </LazyWrapper>
           </ProtectedRoute>
         )
       },
@@ -130,7 +151,9 @@ export const router = createBrowserRouter([
         path: 'study/interview-questions',
         element: (
           <ProtectedRoute>
-            <InterviewQuestions />
+            <LazyWrapper>
+              <LazyInterviewQuestions />
+            </LazyWrapper>
           </ProtectedRoute>
         )
       }

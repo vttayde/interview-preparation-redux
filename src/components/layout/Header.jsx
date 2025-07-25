@@ -1,6 +1,7 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { logout } from '../../features/auth/authSlice';
+import SearchBox from '../SearchBox';
 
 /**
  * Header component for navigation
@@ -27,6 +28,11 @@ const Header = () => {
               Interview Prep
             </Link>
           </div>
+
+          {/* Search Box - only for authenticated users */}
+          {user && (
+            <SearchBox className="flex-1 max-w-md mx-8" />
+          )}
 
           <nav className='hidden md:flex space-x-8'>
             <Link
