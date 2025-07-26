@@ -9,6 +9,7 @@ const NodeJS = () => {
             content={NODEJS_CONTENT}
             language="javascript"
             terminalTitle="Node.js Code Terminal"
+            studyTopicKey="nodejs"
         />
     );
 };
