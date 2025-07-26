@@ -3,11 +3,12 @@ import parse from 'html-react-parser';
 import TopicsNavigation from './TopicsNavigation';
 import CodeDisplay from '../CodeDisplay';
 import CodeTerminal from '../CodeTerminal';
+import Accordion from '../Accordion';
 import { useStudyTopic } from '../../hooks/useStudyTopic';
 
 /**
- * Enhanced reusable layout component for study topics
- * Features: Performance optimizations, custom hook, accessibility, error handling
+ * Reusable layout component for study topics with accordion functionality
+ * Features: Custom hook, accessibility, compound accordion pattern
  */
 const StudyTopicLayout = ({ 
     tabs, 
@@ -17,7 +18,6 @@ const StudyTopicLayout = ({
     terminalTitle = 'Code Terminal',
     defaultTab = null
 }) => {
-    // Use custom hook for study topic logic
     const {
         activeTab,
         terminalOpen,
@@ -30,7 +30,7 @@ const StudyTopicLayout = ({
         hasContent
     } = useStudyTopic(tabs, content, defaultTab);
 
-    // Memoized content rendering for performance
+    // Render accordion content
     const renderTabContent = useMemo(() => {
         if (!hasContent) {
             return (
@@ -44,34 +44,43 @@ const StudyTopicLayout = ({
         }
 
         return (
-            <section className="space-y-6" role="tabpanel" aria-label={`${uiText.title} content`}>
+            <Accordion allowMultiple>
+                <Accordion.Controls 
+                    expandText="Expand All"
+                    collapseText="Collapse All"
+                />
+                
                 {tabContent.map((example) => (
-                    <article 
-                        key={example.id} 
-                        className={`bg-${example.color}-50 p-6 rounded-lg border border-${example.color}-100 transition-shadow hover:shadow-md`}
+                    <Accordion.Item 
+                        key={example.id}
+                        id={`${activeTab}-${example.id}`}
+                        className={`bg-${example.color}-50 border-${example.color}-100 hover:shadow-md`}
                     >
-                        <header>
-                            <h3 className={`font-semibold text-${example.color}-800 mb-3 text-lg`}>
+                        <Accordion.Header className={`hover:bg-${example.color}-100`}>
+                            <h3 className={`font-semibold text-${example.color}-800 text-lg`}>
                                 {example.title}
                             </h3>
-                        </header>
-                        <div className={`text-${example.color}-700 text-sm mb-3 prose max-w-none`}>
-                            {parse(example.description)}
-                        </div>
-                        {example.code && (
-                            <div className="mt-4">
-                                <CodeDisplay
-                                    code={example.code}
-                                    language={language}
-                                    onTryCode={() => handleTryCode(example.code)}
-                                />
+                        </Accordion.Header>
+                        
+                        <Accordion.Panel>
+                            <div className={`text-${example.color}-700 text-sm mb-4 prose max-w-none`}>
+                                {parse(example.description)}
                             </div>
-                        )}
-                    </article>
+                            {example.code && (
+                                <div className="mt-4">
+                                    <CodeDisplay
+                                        code={example.code}
+                                        language={language}
+                                        onTryCode={() => handleTryCode(example.code)}
+                                    />
+                                </div>
+                            )}
+                        </Accordion.Panel>
+                    </Accordion.Item>
                 ))}
-            </section>
+            </Accordion>
         );
-    }, [tabContent, language, handleTryCode, uiText.title, hasContent]);
+    }, [tabContent, activeTab, hasContent, language, handleTryCode]);
 
     // Error boundary fallback
     if (!tabs || !uiText || !content) {
@@ -79,7 +88,7 @@ const StudyTopicLayout = ({
             <div className="bg-red-50 border border-red-200 rounded-lg p-6">
                 <h2 className="text-red-800 font-semibold mb-2">Configuration Error</h2>
                 <p className="text-red-600 text-sm">
-                    Required props (tabs, uiText, content) are missing. Please check the component configuration.
+                    Required props (tabs, uiText, content) are missing.
                 </p>
             </div>
         );
@@ -87,14 +96,14 @@ const StudyTopicLayout = ({
 
     return (
         <div className="bg-white shadow rounded-lg p-6">
-            {/* Header Section */}
+            {/* Header */}
             <header className="border-b border-gray-200 pb-4 mb-6">
                 <h1 className="text-3xl font-bold text-gray-900">{uiText.title}</h1>
                 <p className="mt-2 text-gray-600">{uiText.description}</p>
             </header>
 
-            {/* Tab Navigation with enhanced accessibility */}
-            {tabs && tabs.length > 0 && (
+            {/* Tab Navigation */}
+            {tabs?.length > 0 && (
                 <nav className="mb-6" role="tablist" aria-label={`${uiText.title} sections`}>
                     <div className="flex flex-wrap gap-2">
                         {tabs.map((tab) => (
@@ -120,21 +129,23 @@ const StudyTopicLayout = ({
                 </nav>
             )}
 
-            {/* Tab Content */}
+            {/* Main Content */}
             <main 
                 className="min-h-[400px]"
                 id={`panel-${activeTab}`}
                 aria-labelledby={`tab-${activeTab}`}
+                role="tabpanel" 
+                aria-label={`${uiText.title} content`}
             >
                 {renderTabContent}
             </main>
 
-            {/* Topics Navigation */}
+            {/* Navigation */}
             <nav aria-label="Topic navigation">
                 <TopicsNavigation />
             </nav>
 
-            {/* Code Terminal */}
+            {/* Terminal */}
             {terminalOpen && (
                 <aside aria-label="Code terminal">
                     <CodeTerminal
