@@ -4,7 +4,9 @@ import TopicsNavigation from './TopicsNavigation';
 import CodeDisplay from '../CodeDisplay';
 import CodeTerminal from '../CodeTerminal';
 import Accordion from '../Accordion';
+import FloatingAddButton from '../FloatingAddButton';
 import { useStudyTopic } from '../../hooks/useStudyTopic';
+import { useStudyTopicQuestions } from '../../hooks/useQuestions';
 
 /**
  * Reusable layout component for study topics with accordion functionality
@@ -16,8 +18,10 @@ const StudyTopicLayout = ({
     content, 
     language = 'javascript',
     terminalTitle = 'Code Terminal',
-    defaultTab = null
+    defaultTab = null,
+    studyTopicKey = '' // Key to identify the study topic (e.g., 'javascript', 'html', etc.)
 }) => {
+    // Hooks
     const {
         activeTab,
         terminalOpen,
@@ -30,9 +34,16 @@ const StudyTopicLayout = ({
         hasContent
     } = useStudyTopic(tabs, content, defaultTab);
 
-    // Render accordion content
+    // Get user questions for current topic and merge with existing content
+    const { mergedContent } = useStudyTopicQuestions(
+        studyTopicKey, 
+        activeTab, 
+        tabContent
+    );
+
+    // Render accordion content with merged user questions
     const renderTabContent = useMemo(() => {
-        if (!hasContent) {
+        if (!hasContent && mergedContent.length === 0) {
             return (
                 <div className="flex items-center justify-center h-64 text-gray-500">
                     <div className="text-center">
@@ -43,6 +54,8 @@ const StudyTopicLayout = ({
             );
         }
 
+        const contentToRender = mergedContent.length > 0 ? mergedContent : tabContent;
+
         return (
             <Accordion allowMultiple>
                 <Accordion.Controls 
@@ -50,16 +63,23 @@ const StudyTopicLayout = ({
                     collapseText="Collapse All"
                 />
                 
-                {tabContent.map((example) => (
+                {contentToRender.map((example) => (
                     <Accordion.Item 
                         key={example.id}
                         id={`${activeTab}-${example.id}`}
                         className={`bg-${example.color}-50 border-${example.color}-100 hover:shadow-md`}
                     >
                         <Accordion.Header className={`hover:bg-${example.color}-100`}>
-                            <h3 className={`font-semibold text-${example.color}-800 text-lg`}>
-                                {example.title}
-                            </h3>
+                            <div className="flex items-center justify-between w-full">
+                                <h3 className={`font-semibold text-${example.color}-800 text-lg`}>
+                                    {example.title}
+                                </h3>
+                                {example.isUserAdded && (
+                                    <span className="bg-blue-100 text-blue-800 text-xs px-2 py-1 rounded-full ml-2">
+                                        User Added
+                                    </span>
+                                )}
+                            </div>
                         </Accordion.Header>
                         
                         <Accordion.Panel>
@@ -80,7 +100,7 @@ const StudyTopicLayout = ({
                 ))}
             </Accordion>
         );
-    }, [tabContent, activeTab, hasContent, language, handleTryCode]);
+    }, [mergedContent, tabContent, activeTab, hasContent, language, handleTryCode]);
 
     // Error boundary fallback
     if (!tabs || !uiText || !content) {
@@ -157,6 +177,15 @@ const StudyTopicLayout = ({
                     />
                 </aside>
             )}
+
+            {/* Context-aware floating add button */}
+            {studyTopicKey && (
+                <FloatingAddButton 
+                    studyTopic={studyTopicKey} 
+                    subTopic={activeTab} 
+                />
+            )}
+
         </div>
     );
 };

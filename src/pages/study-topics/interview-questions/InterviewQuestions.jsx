@@ -9,6 +9,7 @@ const InterviewQuestions = () => {
             content={INTERVIEW_QUESTIONS_CONTENT}
             language="javascript"
             terminalTitle="Interview Questions Terminal"
+            studyTopicKey="interview-questions"
         />
     );
 };

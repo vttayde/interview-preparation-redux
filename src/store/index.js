@@ -5,6 +5,7 @@ import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../features/auth/authSlice';
 import formReducer from '../features/form/formSlice';
 import favoritesReducer from '../features/favorites/favoritesSlice';
+import questionsReducer from '../features/questions/questionsSlice';
 
 /**
  * Custom logger middleware for development
@@ -25,7 +26,8 @@ export const store = configureStore({
   reducer: {
     auth: authReducer,
     form: formReducer,
-    favorites: favoritesReducer
+    favorites: favoritesReducer,
+    questions: questionsReducer
   },
   middleware: (getDefaultMiddleware) => 
     import.meta.env.DEV 

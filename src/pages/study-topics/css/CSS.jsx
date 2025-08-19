@@ -9,6 +9,7 @@ const CSS = () => {
             content={CSS_CONTENT}
             language="css"
             terminalTitle="CSS Code Terminal"
+            studyTopicKey="css"
         />
     );
 };

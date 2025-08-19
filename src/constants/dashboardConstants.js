@@ -99,5 +99,12 @@ export const colorMap = {
       green: 'bg-green-50 border-green-200 hover:bg-green-100',
       purple: 'bg-purple-50 border-purple-200 hover:bg-purple-100',
       red: 'bg-red-50 border-red-200 hover:bg-red-100',
-      indigo: 'bg-indigo-50 border-indigo-200 hover:bg-indigo-100'
+      indigo: 'bg-indigo-50 border-indigo-200 hover:bg-indigo-100',
+      emerald: 'bg-emerald-50 border-emerald-200 hover:bg-emerald-100',
+      violet: 'bg-violet-50 border-violet-200 hover:bg-violet-100',
+      teal: 'bg-teal-50 border-teal-200 hover:bg-teal-100',
+      lime: 'bg-lime-50 border-lime-200 hover:bg-lime-100',
+      amber: 'bg-amber-50 border-amber-200 hover:bg-amber-100',
+      rose: 'bg-rose-50 border-rose-200 hover:bg-rose-100',
+      gray: 'bg-gray-50 border-gray-200 hover:bg-gray-100'
     };

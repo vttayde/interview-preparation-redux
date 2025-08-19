@@ -9,6 +9,7 @@ const HTML = () => {
             content={HTML_CONTENT}
             language="html"
             terminalTitle="HTML Code Terminal"
+            studyTopicKey="html"
         />
     );
 };

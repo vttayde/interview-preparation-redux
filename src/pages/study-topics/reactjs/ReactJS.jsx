@@ -8,7 +8,8 @@ const ReactJS = () => {
             uiText={REACT_UI_TEXT}
             content={REACT_CONTENT}
             language="javascript"
-            terminalTitle="React Code Terminal"
+            terminalTitle="React.js Code Terminal"
+            studyTopicKey="reactjs"
         />
     );
 };

@@ -7,8 +7,9 @@ const Database = () => {
             tabs={DATABASE_TABS}
             uiText={DATABASE_UI_TEXT}
             content={DATABASE_CONTENT}
-            // language="sql"
+            language="sql"
             terminalTitle="Database Code Terminal"
+            studyTopicKey="database"
         />
     );
 };

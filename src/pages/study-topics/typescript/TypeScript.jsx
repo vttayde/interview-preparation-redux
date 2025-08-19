@@ -9,6 +9,7 @@ const TypeScript = () => {
             content={TYPESCRIPT_CONTENT}
             language="typescript"
             terminalTitle="TypeScript Code Terminal"
+            studyTopicKey="typescript"
         />
     );
 };

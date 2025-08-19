@@ -13,6 +13,7 @@ const Introduction = () => {
             content={INTRODUCTION_CONTENT}
             language="javascript"
             terminalTitle="Introduction Terminal"
+            studyTopicKey="introduction"
         />
     );
 };

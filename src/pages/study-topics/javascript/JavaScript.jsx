@@ -9,6 +9,7 @@ const JavaScript = () => {
             content={JAVASCRIPT_CONTENT}
             language="javascript"
             terminalTitle="JavaScript Code Terminal"
+            studyTopicKey="javascript"
         />
     );
 };
